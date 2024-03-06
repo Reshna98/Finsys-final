@@ -1,0 +1,81 @@
+{% extends 'company/Fin_base.html' %}
+{% block body %}
+{% load static %}
+
+
+
+<div class="page-content">
+    <div class="card radius-15">
+        <div class="card-body">
+            <div class="card-title">
+                <center>
+                    <h2 class="mb-0 text-uppercase">Retainer Invoices</h2>
+                </center>
+                <hr>
+            </div>
+        </div>
+    </div>
+    <div class="card radius-15">
+        <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4"> 
+                        <div class="d-flex">
+                            <input type="text" id="search" class="form-control" placeholder="Search.." autocomplete="off">
+                        <div class="dropdown ml-1">
+                            <button type="button" class="btn btn-outline-secondary dropdown-toggle text-grey" data-toggle="dropdown">Sort by</button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="" style="height: 40px; font-size: 15px; color: white; text-align: center;">All</a>
+                                <a class="dropdown-item" href="" style="height: 40px; font-size: 15px; color: white; text-align: center;">Customer Name</a>
+                                <a class="dropdown-item" href="" style="height: 40px; font-size: 15px; color: white; text-align: center;">Retainer Invoice No</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="col-md-3"></div>
+                <div class="col-md-5 d-flex justify-content-end">
+                    <button type="button" class="btn btn-outline-secondary text-grey" ><i class="fa fa-table"></i> Export To Excel</button>
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle text-grey ml-1" data-toggle="dropdown"><i class="fa fa-filter"></i> Filter by</button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="" style="height: 40px; font-size: 15px; color: white; text-align: center;">All</a>
+                            <a class="dropdown-item" href="" style="height: 40px; font-size: 15px; color: white; text-align: center;">Draft</a>
+                            <a class="dropdown-item" href="" style="height: 40px; font-size: 15px; color: white; text-align: center;">Sent</a>
+                        </div>
+                    </div>
+                
+                   
+                        <a href="{% url 'Fin_Create_RET_INV'%}" class="ml-1"></i><button type="button" class="btn btn-outline-secondary text-grey"><i class="fa fa-plus font-weight-light"></i> New</button></a>
+                    </a>
+                </div>
+               
+            </div>
+            <div class="container-fluid">
+                <table class="table table-responsive-md mt-4 table-hover">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center;">Date</th>
+                            <th style="text-align: center;">Retainer Invoice No</th>
+                            <th style="text-align: center;">Customer Name</th>
+                            <th style="text-align: center;">Customer Mail Id</th>
+                            <th style="text-align: center;">Amount</th>
+                            <th style="text-align: center;">Status</th>
+                            <th style="text-align: center;">Balance</th>
+                            <th style="text-align: center;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Your table content goes here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+ 
+</script>
+
+{% endblock %}
