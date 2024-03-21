@@ -135,7 +135,7 @@ textarea::-webkit-scrollbar-thumb:hover {
             <div class="row">
                 <div class="col-md-4 mt-3">
                     <div class="d-flex">
-                        <label class="">Invoice No.</label><span class="text-danger ml-3" id="invNoErr"></span>
+                        <label class="">Retainer Invoice No.</label><span class="text-danger ml-3" id="invNoErr"></span>
                     </div>
                     <input type="text" class="form-control" name="invoice_no"  id="invoiceNumber" style="background-color: #43596c;" placeholder="{{invNo}}" required>
                 </div>
@@ -1252,13 +1252,17 @@ function fetchCustomerDetails(customerId) {
     $('#gstin').val(data.gstno);
     $('#placeOfSupply').val(data.placesupply); 
     $('#billAddress').val(data.street + '\n' + data.city + '\n' + data.state + '\n' + data.pincode +  '\n'+ data.country);
-    if(data.gstin){
+    if(data.gstno){
+        console.log("GSTIN exists");
         document.getElementById('gstInDisplay').style.display = 'block';
         document.getElementById('gstin').value = data.gstno;
     }else{
+        console.log("GSTIN does not exist");
         document.getElementById('gstInDisplay').style.display = 'none';
         document.getElementById('gstin').value = '';
     }
+ 
+
 },
 
     });
