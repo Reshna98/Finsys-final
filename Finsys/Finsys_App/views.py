@@ -17116,3 +17116,30 @@ def Fin_Retinvcustomer_paymentterm(request):
 
     else:
         return redirect('/')         
+
+def Fin_RETINV_CustomerData(request):
+    if 's_id' in request.session:
+        s_id = request.session['s_id']
+        data = Fin_Login_Details.objects.get(id = s_id)
+        if data.User_Type == "Company":
+            com = Fin_Company_Details.objects.get(Login_Id = s_id)
+        else:
+            com = Fin_Staff_Details.objects.get(Login_Id = s_id)
+        
+        customerid = request.POST['id']
+        cust = Fin_Customers.objects.get(id = customerid)
+        email = cust.email
+        street = cust.billing_street
+        city = cust.billing_city
+        state = cust.billing_state
+        pincode = cust.billing_pincode
+        country = cust.billing_country
+        gsttype = cust.gst_type
+        gstno = cust.gstin
+        placesupply = cust.place_of_supply
+        
+        context = {
+                'id':cust.id,'placesupply':placesupply,'country':country,'city':city,'street':street,'pincode':pincode,'state':state,'email' : email, 'gstno' : gstno, 'gsttype': gsttype}
+    return JsonResponse(context, safe=False)
+
+   

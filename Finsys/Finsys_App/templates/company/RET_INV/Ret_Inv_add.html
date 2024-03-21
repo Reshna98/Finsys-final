@@ -2,10 +2,39 @@
 {% extends 'company/Fin_base.html' %}
 {% block body %}
 {% load static %}
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet"/>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" defer></script>
+
 
 <style>
- 
+
+     .select2-results__options {
+      max-height: 150px; 
+      overflow-y: auto; }
+
+   
+    .select2-results__options::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .select2-results__options::-webkit-scrollbar-track {
+      background: #f1f1f1; 
+    }
+
+    .select2-results__options::-webkit-scrollbar-thumb {
+      background: #888; 
+    }
+
+    .select2-results__options::-webkit-scrollbar-thumb:hover {
+      background: #555; 
+    }
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: white;
+    line-height: 28px
+}
+
+
 .select2-container--default .select2-search--dropdown .select2-search__field {
     width: 100%;
     border: none;
@@ -30,12 +59,27 @@
 .select2-container--default .select2-dropdown {
     background: #15324b;
 }
+/* Target the scrollbar in the textarea */
+textarea::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track of the scrollbar */
+textarea::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+
+/* Handle of the scrollbar */
+textarea::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle of the scrollbar on hover */
+textarea::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
 
 </style>
-
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-
-
 <!-- <form action="{% url 'Fin_Create_RET_INV' %}" method="post" class="needs-validation" enctype="multipart/form-data" onsubmit="return validateForm()">
   {% csrf_token %} -->
 <form action="{% url 'Fin_Create_RET_INV' %}" method="post" enctype="multipart/form-data" autocomplete="off">
@@ -410,7 +454,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label for="placeOfSupply">Place of Supply</label>
-                                <select class="custom-select form-control" id="placeOfSupply" name="place_of_supply" style="background-color: #43596c; color: white;" required>
+                                <select class="custom-select form-control" id="placeOfSupplyC" name="place_of_supply" style="background-color: #43596c; color: white;" required>
                                     <option selected value="">Select Place of Supply</option>
                                     <option value="Andaman and Nicobar Islads">Andaman and Nicobar Islands</option>
                                     <option value="Andhra Predhesh">Andhra Predhesh</option>
@@ -537,7 +581,7 @@
                             <div class="col-md-4">
                                 <label for="custEmail">Email</label>
                                 <input type="email" class="form-control" required id="custEmail" name="email" onchange="checkemail(this)" style="background-color: #43596c;color: white;" placeholder="finsys@gmail.com">
-                                <div class="invalid-feedback">Please provide a valid Email</div>
+                                <div id="warnemail" class="text-danger"></div>
                             </div>
                             <div class="col-md-4">
                                 <label for="custWebsite">Website</label>
@@ -763,8 +807,13 @@
 
 
    <!-- Customer -->
+<script>
+$(document).ready(function() {
+    $('#customer').select2();
+   
+});
 
-   <script>
+
     function placeShipAddress() {
         var chkbtn = document.getElementById('shipAddress');
         if (chkbtn.checked == true) {
@@ -1080,27 +1129,48 @@
     }
 
     $(document).on("click", "#customerSave", function(){
+        var fName = $('#firstName').val();
+        var lName = $('#lastName').val();
+        var placeSupply = $('#placeOfSupplyC').val();
+        var gstType = $("#gsttype").val();
+        var gstIN = $("#gstIn").val();
+        var panNo = $("#panNo").val();
+        var Email = $("#custEmail").val();
+        var Mob = $("#custMobile").val();
+        var street = $("#street").val();
+        var city = $("#city").val();
+        var state = $("#state").val();
+        var pin = $("#pinco").val();
+        var country = $("#country").val();
+        if(gstType != "Unregistered Business" && gstType != 'Overseas' && gstType != 'Consumer' && gstIN == ""){
+            alert('Fill all required fields..!')
+            return
+        }
+
+        if(fName != "" && lName != "" && placeSupply != "" && gstType != "" && panNo != "" && Email != "" && Mob != "" && street != "" && city != "" && state != "" && pin != "" && country != ""){
+        
     $.ajax({
         type: 'POST',
         url: "{% url 'Fin_RET_INV_Customer' %}",
         data: {
             title: $('#title').val(),
-            first_name: $('#firstName').val(),
-            last_name: $('#lastName').val(),
+            first_name : fName,
+            last_name : lName,
             company_name: $("#companyName").val(),
             location: $("#location").val(),
-            place_of_supply: $('#placeOfSupply').val(),
-            gst_type: $("#gsttype").val(),
-            gstin: $("#gstIn").val(),
+            place_of_supply : placeSupply,
+            gst_type : gstType,
+            gstin : gstIN,
+            pan_no : panNo,
             price_list: $('#priceList').val(),
             payment_terms: $('#paymentTerms').val(),
             open_balance: $("#openbalance").val(),
             balance_type: $("#bal").val(),
             credit_limit: $("#creditLimit").val(),
-            email: $("#custEmail").val(),
-            website: $("#custWebsite").val(),
-            mobile: $("#custMobile").val(),
-            street: $("#street").val(),
+            email : Email,
+            website :$("#custWebsite").val(),
+            mobile : Mob,
+            street : street,
             city: $("#city").val(),
             state: $("#state").val(),
             country: $("#country").val(),
@@ -1115,49 +1185,94 @@
         success: function(response) {
             if(response.status){
                 console.log("AJAX Success", response);
-                $("#modalCustomer").trigger("reset");
+                $("#Modalcustomer").trigger("reset");
                 reloadcustomer();
             } else {
                 alert(response.message);
             }
         },
     });
+}
+    else{
+            alert('Fill all required fields..!')
+            return
+        }
+});
+function reloadcustomer() {
+    $.ajax({
+        url: "{% url 'Fin_get_RET_INV_Customers' %}",
+        type: "GET",
+        dataType: "json",
+        data: {},
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+
+        success: function(data) {
+            var dropdown = $('#customer');
+            dropdown.empty();
+            dropdown.append(`<option value="0" selected>Select Customer</option>`);
+            $.each(data, function(key, value) {
+                console.log("Appending option:", value[1] + " " + value[2] + " " + value[3]);
+                dropdown.append($('<option selected></option>').attr('value', value[0]).text(value[1] + " " + value[2] + " " + value[3]));
+            });
+
+            $('#customer').trigger('change');
+        
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+        }
+    });
+
+    if ($('#CustomerPTerm').hasClass('show')) {
+        $('#CustomerPTerm').modal('toggle');
+    }
+}
+
+
+    $(document).ready(function() {
+    $('#newcustomer').on('hidden.bs.modal', function () {
+        if ($('#CustomerPTerm').hasClass('show')) {
+            $('#CustomerPTerm').modal('hide');
+        }
+    });
+
+});
+
+function fetchCustomerDetails(customerId) {
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'Fin_RETINV_CustomerData' %}",
+        data: {
+            'id': customerId,
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        success: function(response) {
+            $('#gstType').val(response.gsttype);
+            $('#customerEmail').val(response.email);
+            $('#gstin').val(response.gstno);
+            $('#placeOfSupply').val(response.placesupply); 
+            $('#billAddress').val(response.street + '\n' + response.city + '\n' + response.state + '\n' + response.pincode +  '\n'+ response.country);
+            if(data.gstin){
+                        document.getElementById('gstInDisplay').style.display = 'block';
+                        document.getElementById('gstin').value = data.gstno;
+                    }else{
+                        document.getElementById('gstInDisplay').style.display = 'none';
+                        document.getElementById('gstin').value = '';
+                    }
+        },
+        error: function(xhr, errmsg, err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
+    });
+}
+$(document).ready(function() {
+    $('#customer').change(function() {
+        var customerId = $(this).val();
+        fetchCustomerDetails(customerId);
+    });
 });
 
 
-    function reloadcustomer() {
-        $.ajax({
-            url: "{% url 'Fin_get_RET_INV_Customers' %}",
-            type: "GET",
-            dataType: "json",
-            data: {},
-            csrfmiddlewaretoken: '{{ csrf_token }}',
-
-            success: function(data) {
-                // var $select = $(document.getElementById('customer'));
-                // var selectize = $select[0].selectize;
-                // $.each(data, function(key, value) {
-                //     selectize.addOption({value:value[0],text:value[1]+' '+value[2]+' '+value[3]});
-                //     selectize.addItem(value[0]); 
-                // });
-            $.each(data, function(key, value) {
-       
-              dropdown.append($('<option></option>').attr({value:value[0],text:value[1] + " " + value[3] + " " + value[3]}));
-           
-         });
-
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-
-        });
-        refreshCustomerDetails();
-
-        if ($('#newCustomerPaymentTerm').hasClass('show')){
-            $('#newCustomerPaymentTerm').modal('toggle');
-        }
-    }
 </script>
 
 
