@@ -1252,7 +1252,7 @@ function fetchCustomerDetails(customerId) {
             $('#gstin').val(response.gstno);
             $('#placeOfSupply').val(response.placesupply); 
             $('#billAddress').val(response.street + '\n' + response.city + '\n' + response.state + '\n' + response.pincode +  '\n'+ response.country);
-            if(data.gstin){
+            if(response.gstin){
                         document.getElementById('gstInDisplay').style.display = 'block';
                         document.getElementById('gstin').value = data.gstno;
                     }else{
