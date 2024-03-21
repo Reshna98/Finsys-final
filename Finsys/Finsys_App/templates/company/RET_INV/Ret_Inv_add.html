@@ -1246,23 +1246,21 @@ function fetchCustomerDetails(customerId) {
             'id': customerId,
             csrfmiddlewaretoken: '{{ csrf_token }}'
         },
-        success: function(response) {
-            $('#gstType').val(response.gsttype);
-            $('#customerEmail').val(response.email);
-            $('#gstin').val(response.gstno);
-            $('#placeOfSupply').val(response.placesupply); 
-            $('#billAddress').val(response.street + '\n' + response.city + '\n' + response.state + '\n' + response.pincode +  '\n'+ response.country);
-            if(response.gstin){
-                        document.getElementById('gstInDisplay').style.display = 'block';
-                        document.getElementById('gstin').value = data.gstno;
-                    }else{
-                        document.getElementById('gstInDisplay').style.display = 'none';
-                        document.getElementById('gstin').value = '';
-                    }
-        },
-        error: function(xhr, errmsg, err) {
-            console.log(xhr.status + ": " + xhr.responseText);
-        }
+        success: function(data) {
+    $('#gstType').val(data.gsttype);
+    $('#customerEmail').val(data.email);
+    $('#gstin').val(data.gstno);
+    $('#placeOfSupply').val(data.placesupply); 
+    $('#billAddress').val(data.street + '\n' + data.city + '\n' + data.state + '\n' + data.pincode +  '\n'+ data.country);
+    if(data.gstin){
+        document.getElementById('gstInDisplay').style.display = 'block';
+        document.getElementById('gstin').value = data.gstno;
+    }else{
+        document.getElementById('gstInDisplay').style.display = 'none';
+        document.getElementById('gstin').value = '';
+    }
+},
+
     });
 }
 $(document).ready(function() {
