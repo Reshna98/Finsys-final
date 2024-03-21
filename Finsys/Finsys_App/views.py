@@ -16864,6 +16864,18 @@ def Fin_RET_INV_Add(request):
             com = Fin_Staff_Details.objects.get(Login_Id = s_id)
             allmodules = Fin_Modules_List.objects.get(company_id = com.company_id,status = 'New')
             cmp = com.company_id
+        latest_ret_inv = Fin_RET_INV.objects.filter(company=cmp).order_by('-id').first()
+
+        # If there are existing retainer invoices, increment the numeric part of the latest one
+        if latest_ret_inv:
+            # Extract the numeric part of the retainer invoice number
+            prefix = 'RETINV'  # Set the prefix
+            numeric_part = int(latest_ret_inv.ret_inv_no[len(prefix):])  # Extract the numeric part
+            next_numeric_part = numeric_part + 1  # Increment the numeric part
+            ret_inv_no = f"{prefix}{next_numeric_part}"  # Format the next retainer invoice number
+        else:
+            # If there are no existing retainer invoices, leave it empty
+            ret_inv_no = ''
 
         item = Fin_Items.objects.filter(Company = cmp, status = 'Active')
         customer = Fin_Customers.objects.filter(Company = cmp, status = 'Active')
