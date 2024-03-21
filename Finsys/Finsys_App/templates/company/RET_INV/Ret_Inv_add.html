@@ -1247,7 +1247,7 @@ function fetchCustomerDetails(customerId) {
             csrfmiddlewaretoken: '{{ csrf_token }}'
         },
         success: function(response) {
-            $('#gstType').val(response.gsttype);
+            $('#gstType').val(data.gsttype);
             $('#customerEmail').val(response.email);
             $('#gstin').val(response.gstno);
             $('#placeOfSupply').val(response.placesupply); 
