@@ -16864,7 +16864,7 @@ def Fin_RET_INV_Add(request):
             com = Fin_Staff_Details.objects.get(Login_Id = s_id)
             allmodules = Fin_Modules_List.objects.get(company_id = com.company_id,status = 'New')
             cmp = com.company_id
-        latest_ret_inv = Fin_RET_INV.objects.filter(company=cmp).order_by('-id').first()
+        latest_ret_inv = Fin_Retainer_Invoice.objects.filter(Company=cmp).order_by('-id').first()
 
       
         if latest_ret_inv:
@@ -16913,9 +16913,9 @@ def Fin_Create_RET_INV(request):
             reference_no=request.POST.get('reference_no')
             ret_inv_date = request.POST.get('ret_inv_date')
             payment_method=request.POST.get('payment_method')
-            upi=request.POST.get('upi_id')
-            cheque=request.POST.get('cheque_id')
-            acc_no=request.POST.get('acc_no')            
+            upi=request.POST.get('upi')
+            cheque=request.POST.get('cheque')
+            acc_no=request.POST.get('a/c_no')            
             sub_total=request.POST.get('sub_total')
             adjustment=request.POST.get('adjustment')
             grand_total=request.POST.get('grand_total')

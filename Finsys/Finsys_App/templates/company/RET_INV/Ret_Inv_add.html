@@ -134,16 +134,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 
             <div class="row">
                 <div class="col-md-4 mt-3">
-                    <div class="d-flex">
-                        <label class="">Retainer Invoice No.</label><span class="text-danger ml-3" id="RETno"></span>
-                    </div>
-                    <input type="text" class="form-control" name="ret_inv_no"  id="RETNUM" style="background-color: #43596c;" placeholder="{{invNo}}" required>
-                </div>
-                <div class="col-md-4 mt-3">
-                    <label class="">Reference Number</label>
-                    <input type="text" class="form-control" name="reference_number" value="{{ref_no}}" style="background-color: #43596c;" readonly>
-                </div>
-                <div class="col-md-4 mt-3">
                     <input hidden value="{{cmp.State}}" id="cmpstate">
                     <label class="">Place of supply</label>
                     <select type="text" class="form-control" id="placeOfSupply" name="place_of_supply" style="background-color: #43596c; color: white;" required>
@@ -188,12 +178,24 @@ textarea::-webkit-scrollbar-thumb:hover {
                         <option value="Other Territory">Other Territory</option>
                     </select>
                 </div>
+                <div class="col-md-4 mt-3">
+                    <div class="d-flex">
+                        <label class="">Retainer Invoice No.</label><span class="text-danger ml-3" id="RETno"></span>
+                    </div>
+                    <input type="text" class="form-control" name="ret_inv_no"  id="RETNUM" style="background-color: #43596c;color:white;" placeholder="RETINV01" required>
+                </div>
+                <div class="col-md-4 mt-3">
+                    <label class="">Retainer Invoice Date:</label>
+                    <input type="date" class="form-control" name="invoice_date" id="invoiceDate" style="background-color: #43596c; color: white;" value="{% now 'Y-m-d' %}">
+                </div>
+               
+               
             </div>
 
             <div class="row">
-                <div class="col-md-3 mt-3">
-                    <label class="">Retainer Invoice Date:</label>
-                    <input type="date" class="form-control" name="invoice_date" id="invoiceDate" style="background-color: #43596c; color: white;" value="{% now 'Y-m-d' %}">
+                <div class="col-md-4 mt-3">
+                    <label class="">Reference Number</label>
+                    <input type="text" class="form-control" name="reference_number" value="{{ref_no}}" style="background-color: #43596c;" readonly>
                 </div>
                 
 
@@ -209,17 +211,17 @@ textarea::-webkit-scrollbar-thumb:hover {
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-md-3 mt-3" style="display:none;"  id="chequediv">
+                <div class="col-md-3 mt-3" style="display:none;"  id="cheque">
                     <label class="" >Cheque No</label>
-                    <input type="text" class="form-control" name="cheque_id" id="cheque_id" placeholder="Enter Cheque No">
+                    <input type="text" class="form-control" name="cheque" id="chequeno" placeholder="Enter Cheque No">
                 </div>
-                <div class="col-md-3 mt-3"  style="display:none;" id="upidiv">
+                <div class="col-md-3 mt-3"  style="display:none;" id="upi">
                     <label class="" >UPI ID</label>
-                    <input type="text" class="form-control" name="upi_id" id="upi_id" placeholder="Enter UPI ID">
+                    <input type="text" class="form-control" name="upi" id="upino" placeholder="Enter UPI ID">
                 </div>
-                <div class="col-md-3 mt-3"  style="display:none;" id="bnkdiv">
+                <div class="col-md-3 mt-3"  style="display:none;" id="bank">
                     <label class="" >Account#</label>
-                    <input type="text" class="form-control" name="bnk_id" id="bnk_id" style="background-color: #43596c;" readonly>
+                    <input type="text" class="form-control" name="a/c_no" id="bnkno" style="background-color: #43596c;" readonly>
                 </div>
             </div>
             <div class="row clearfix ">
@@ -806,8 +808,9 @@ textarea::-webkit-scrollbar-thumb:hover {
 
 
 
-   <!-- Customer -->
+   
 <script>
+// customer section
 $(document).ready(function() {
     $('#customer').select2();
    
@@ -1273,7 +1276,34 @@ $(document).ready(function() {
         fetchCustomerDetails(customerId);
     });
 });
+//  payment method section
 
+   
+    var paymentMethodSelect = document.getElementById("paymentMethod");
+    var chequeDiv = document.getElementById("cheque");
+    var upiDiv = document.getElementById("upi");
+    var bankDiv = document.getElementById("bank");
+
+    
+    paymentMethodSelect.addEventListener("change", function() {
+       
+        var selectedPaymentMethod = paymentMethodSelect.value;
+
+       
+        chequeDiv.style.display = "none";
+        upiDiv.style.display = "none";
+        bankDiv.style.display = "none";
+
+        if (selectedPaymentMethod === "Cheque") {
+            chequeDiv.style.display = "block";
+        } else if (selectedPaymentMethod === "UPI") {
+            upiDiv.style.display = "block";
+        } else if (selectedPaymentMethod !== "Bank") {
+            bankDiv.style.display = "block";
+           
+        }
+    });
+</script>
 
 </script>
 
