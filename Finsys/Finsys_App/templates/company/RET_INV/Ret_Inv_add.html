@@ -180,13 +180,16 @@ textarea::-webkit-scrollbar-thumb:hover {
                 </div>
                 <div class="col-md-4 mt-3">
                     <div class="d-flex">
+                        <div id="retInvError1" style="color: red; display: none;">Retainer Invoice Number is already used</div>
+                        <div id="retInvError2" style="color: red; display: none;">Retainer Invoice Number is not continuous</div>
+                        <div id="retInvError3" style="color: red; display: none;">Invalid Retainer Invoice Number</div>
                         <label class="">Retainer Invoice No.</label><span class="text-danger ml-3" id="RETno"></span>
                     </div>
                     <input type="text" class="form-control" name="ret_inv_no"  id="RETNUM" style="background-color: #43596c;color:white;" placeholder="RETINV01" required>
                 </div>
                 <div class="col-md-4 mt-3">
                     <label class="">Retainer Invoice Date:</label>
-                    <input type="date" class="form-control" name="invoice_date" id="invoiceDate" style="background-color: #43596c; color: white;" value="{% now 'Y-m-d' %}">
+                    <input type="date" class="form-control" name="ret_inv_date" id="riDate" style="background-color: #43596c; color: white;" value="{% now 'Y-m-d' %}">
                 </div>
                
                
@@ -207,7 +210,7 @@ textarea::-webkit-scrollbar-thumb:hover {
                         <option value="Cheque">Cheque</option>
                         <option value="UPI">UPI</option>
                         {% for b in banks %}
-                        <option value="{{b.bank_name}}" text="{{b.id}}">{{b.bank_name}}</option>
+                        <option value="{{b.id}}">{{b.bank_name}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -220,8 +223,8 @@ textarea::-webkit-scrollbar-thumb:hover {
                     <input type="text" class="form-control" name="upi" id="upino" placeholder="Enter UPI ID">
                 </div>
                 <div class="col-md-3 mt-3"  style="display:none;" id="bank">
-                    <label class="" >Account#</label>
-                    <input type="text" class="form-control" name="a/c_no" id="bnkno" style="background-color: #43596c;" readonly>
+                    <label class="" >Account Number</label>
+                    <input type="text" class="form-control" name="a/c_no" id="bankno" style="background-color: #43596c;" readonly>
                 </div>
             </div>
             <div class="row clearfix ">
@@ -1277,35 +1280,84 @@ $(document).ready(function() {
     });
 });
 //  payment method section
+$(document).ready(function() {
+    $('#paymentMethod').change(function() {
+        var selectedPaymentMethod = $(this).val();
+        console.log("Selected Payment Method:", selectedPaymentMethod);
 
-   
-    var paymentMethodSelect = document.getElementById("paymentMethod");
-    var chequeDiv = document.getElementById("cheque");
-    var upiDiv = document.getElementById("upi");
-    var bankDiv = document.getElementById("bank");
-
-    
-    paymentMethodSelect.addEventListener("change", function() {
-       
-        var selectedPaymentMethod = paymentMethodSelect.value;
-
-       
-        chequeDiv.style.display = "none";
-        upiDiv.style.display = "none";
-        bankDiv.style.display = "none";
-
+        $('#cheque, #upi, #bank').hide();
         if (selectedPaymentMethod === "Cheque") {
-            chequeDiv.style.display = "block";
+            $('#cheque').show();
+            $('#upi').hide();
+            $('#bank').hide(); 
         } else if (selectedPaymentMethod === "UPI") {
-            upiDiv.style.display = "block";
-        } else if (selectedPaymentMethod !== "Bank") {
-            bankDiv.style.display = "block";
-           
+            $('#cheque').hide();
+            $('#upi').show();
+            $('#bank').hide(); 
+        } else if (selectedPaymentMethod === "Cash") {
+            $('#cheque').hide();
+            $('#upi').hide();
+            $('#bank').hide();
+        } else if (selectedPaymentMethod !== "") {
+            $('#bank').show();
+
+            if (selectedPaymentMethod !== "") 
+            {
+                $.ajax({
+                    type: 'GET',
+                    url: "{% url 'fetch_bank_account' %}",
+                    data: {'bankid': selectedPaymentMethod},
+                
+                    success: function(response) {
+                        $('#bankno').val(response.bank_account);
+                        $('#bank').show();
+                    },
+                    error: function(xhr, errmsg, err) {
+                        console.log(xhr.status + ": " + xhr.responseText);
+                    }
+                });
+            } else {
+                $('#bank').hide();
+            }
+        } else {
+            $('#bank').hide();
         }
     });
-</script>
+});
+// RetInv number section
+$(document).ready(function() {
+        var retInvNo = $('#RETNUM').val();
+        console.log("retInvNo:", retInvNo);
+        $.ajax({
+            type: 'GET',
+            url: "{% url 'validate_retainer_invoice' %}",
+            data: {'ret_inv_no': retInvNo},
+            success: function(response) {
+                $('#retInvError1').hide();
+                $('#retInvError2').hide();
+                $('#retInvError3').hide();
+
+                if (!response.valid) {
+                    console.log(response.error)
+                    if (response.error === 'Number already used') {
+                        $('#retInvError1').show();
+                    } else if (response.error === 'Number not continuous') {
+                        $('#retInvError2').show();
+                    } else if (response.error === 'Incorrect code') {
+                        $('#retInvError3').show();
+                    }
+                }
+            },
+            error: function(xhr, errmsg, err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+    });
 
 </script>
+
+
+
 
 
 

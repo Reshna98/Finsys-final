@@ -16864,7 +16864,7 @@ def Fin_RET_INV_Add(request):
             com = Fin_Staff_Details.objects.get(Login_Id = s_id)
             allmodules = Fin_Modules_List.objects.get(company_id = com.company_id,status = 'New')
             cmp = com.company_id
-        latest_ret_inv = Fin_Retainer_Invoice.objects.filter(Company=cmp).order_by('-id').first()
+        latest_ret_inv = Fin_Retainer_Invoice.objects.filter(Company=cmp).last()
 
       
         if latest_ret_inv:
@@ -16892,6 +16892,38 @@ def Fin_RET_INV_Add(request):
         return render(request,'company/RET_INV/RET_INV_add.html',context)
     else:
        return redirect('/')
+def validate_retainer_invoice(request):
+    if 's_id' in request.session:
+        s_id = request.session['s_id']
+        data = Fin_Login_Details.objects.get(id = s_id)
+        if data.User_Type == "Company":
+            com = Fin_Company_Details.objects.get(Login_Id = s_id)
+            allmodules = Fin_Modules_List.objects.get(Login_Id = s_id,status = 'New')
+            cmp = com
+        else:
+            com = Fin_Staff_Details.objects.get(Login_Id = s_id)
+            allmodules = Fin_Modules_List.objects.get(company_id = com.company_id,status = 'New')
+            cmp = com.company_id
+    
+    ret_inv_num = request.GET.get('ret_inv_no')
+    print(ret_inv_num)
+    
+    if Fin_Retainer_Invoice.objects.filter(Retainer_Invoice_number=ret_inv_num).exists():
+        return JsonResponse({'valid': False, 'error': 'Number already used'}, status=400)
+
+    if Fin_Retainer_Invoice.objects.exists():
+        latest_ret_inv = Fin_Retainer_Invoice.objects.latest('id')
+        latest_numeric_part = int(latest_ret_inv.ret_inv_no[6:])
+        current_numeric_part = int(ret_inv_num[6:])
+        if current_numeric_part != latest_numeric_part + 1:
+            return JsonResponse({'valid': False, 'error': 'Number not continuous'}, status=400)
+
+    if not ret_inv_num.startswith('RETINV'):
+        return JsonResponse({'valid': False, 'error': 'Incorrect code'}, status=400)
+    
+    return JsonResponse({'valid': True})
+
+    
 
 def Fin_Create_RET_INV(request):
     if 's_id' in request.session:
@@ -17154,4 +17186,22 @@ def Fin_RETINV_CustomerData(request):
                 'id':cust.id,'placesupply':placesupply,'country':country,'city':city,'street':street,'pincode':pincode,'state':state,'email' : email, 'gstno' : gstno, 'gsttype': gsttype}
     return JsonResponse(context, safe=False)
 
-   
+def fetch_bank_account(request):
+    if 's_id' in request.session:
+        s_id = request.session['s_id']
+        data = Fin_Login_Details.objects.get(id = s_id)
+        if data.User_Type == "Company":
+            com = Fin_Company_Details.objects.get(Login_Id = s_id)
+        else:
+            com = Fin_Staff_Details.objects.get(Login_Id = s_id)
+    
+        bank_id = request.GET.get('bankid')
+    
+        try:
+            bank = Fin_Banking.objects.get(id=bank_id)
+            bank_account = bank.account_number 
+            print(bank_account)
+            return JsonResponse({'bank_account': bank_account})
+        except Fin_Banking.DoesNotExist:
+            return JsonResponse({'error': 'Bank account not found'}, status=404)
+       
