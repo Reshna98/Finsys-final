@@ -16895,33 +16895,42 @@ def Fin_RET_INV_Add(request):
 def validate_retainer_invoice(request):
     if 's_id' in request.session:
         s_id = request.session['s_id']
-        data = Fin_Login_Details.objects.get(id = s_id)
+        data = Fin_Login_Details.objects.get(id=s_id)
         if data.User_Type == "Company":
-            com = Fin_Company_Details.objects.get(Login_Id = s_id)
-            allmodules = Fin_Modules_List.objects.get(Login_Id = s_id,status = 'New')
+            com = Fin_Company_Details.objects.get(Login_Id=s_id)
+            allmodules = Fin_Modules_List.objects.get(Login_Id=s_id, status='New')
             cmp = com
         else:
-            com = Fin_Staff_Details.objects.get(Login_Id = s_id)
-            allmodules = Fin_Modules_List.objects.get(company_id = com.company_id,status = 'New')
+            com = Fin_Staff_Details.objects.get(Login_Id=s_id)
+            allmodules = Fin_Modules_List.objects.get(company_id=com.company_id, status='New')
             cmp = com.company_id
-    
-    ret_inv_num = request.GET.get('ret_inv_no')
-    print(ret_inv_num)
-    
-    if Fin_Retainer_Invoice.objects.filter(Retainer_Invoice_number=ret_inv_num).exists():
-        return JsonResponse({'valid': False, 'error': 'Number already used'}, status=400)
 
-    if Fin_Retainer_Invoice.objects.exists():
-        latest_ret_inv = Fin_Retainer_Invoice.objects.latest('id')
-        latest_numeric_part = int(latest_ret_inv.ret_inv_no[6:])
-        current_numeric_part = int(ret_inv_num[6:])
-        if current_numeric_part != latest_numeric_part + 1:
-            return JsonResponse({'valid': False, 'error': 'Number not continuous'}, status=400)
+        ret_inv_num = request.GET.get('ret_inv_no')
+        print("Received retainer invoice number:", ret_inv_num)
 
-    if not ret_inv_num.startswith('RETINV'):
-        return JsonResponse({'valid': False, 'error': 'Incorrect code'}, status=400)
-    
-    return JsonResponse({'valid': True})
+        if Fin_Retainer_Invoice.objects.filter(Retainer_Invoice_number=ret_inv_num).exists():
+            error_msg = 'Number already used'
+            print("Error:", error_msg)
+            return JsonResponse({'valid': False, 'error': error_msg}, status=400)
+
+        if Fin_Retainer_Invoice.objects.exists():
+            latest_ret_inv = Fin_Retainer_Invoice.objects.latest('id')
+            latest_numeric_part = int(latest_ret_inv.ret_inv_no[6:])
+            current_numeric_part = int(ret_inv_num[6:])
+            if current_numeric_part != latest_numeric_part + 1:
+                error_msg = 'Number not continuous'
+                print("Error:", error_msg)
+                return JsonResponse({'valid': False, 'error': error_msg})
+
+        if not ret_inv_num.startswith('RETINV'):
+            error_msg = 'Incorrect code'
+            print("Error:", error_msg)
+            return JsonResponse({'valid': False, 'error': error_msg})
+
+        return JsonResponse({'valid': True})
+
+    return JsonResponse({'valid': False, 'error': 'Session not found'})
+
 
     
 

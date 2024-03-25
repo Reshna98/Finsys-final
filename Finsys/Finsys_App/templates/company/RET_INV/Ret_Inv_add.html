@@ -179,11 +179,11 @@ textarea::-webkit-scrollbar-thumb:hover {
                     </select>
                 </div>
                 <div class="col-md-4 mt-3">
-                    <div class="d-flex">
+                    <div class="d-flex flex-column">
+                        <label class="">Retainer Invoice No.</label><span class="text-danger ml-3" id="RETno"></span>
                         <div id="retInvError1" style="color: red; display: none;">Retainer Invoice Number is already used</div>
                         <div id="retInvError2" style="color: red; display: none;">Retainer Invoice Number is not continuous</div>
                         <div id="retInvError3" style="color: red; display: none;">Invalid Retainer Invoice Number</div>
-                        <label class="">Retainer Invoice No.</label><span class="text-danger ml-3" id="RETno"></span>
                     </div>
                     <input type="text" class="form-control" name="ret_inv_no"  id="RETNUM" style="background-color: #43596c;color:white;" placeholder="RETINV01" required>
                 </div>
@@ -1325,34 +1325,33 @@ $(document).ready(function() {
     });
 });
 // RetInv number section
-$(document).ready(function() {
-        var retInvNo = $('#RETNUM').val();
-        console.log("retInvNo:", retInvNo);
-        $.ajax({
-            type: 'GET',
-            url: "{% url 'validate_retainer_invoice' %}",
-            data: {'ret_inv_no': retInvNo},
-            success: function(response) {
-                $('#retInvError1').hide();
-                $('#retInvError2').hide();
-                $('#retInvError3').hide();
 
-                if (!response.valid) {
-                    console.log(response.error)
-                    if (response.error === 'Number already used') {
-                        $('#retInvError1').show();
-                    } else if (response.error === 'Number not continuous') {
-                        $('#retInvError2').show();
-                    } else if (response.error === 'Incorrect code') {
-                        $('#retInvError3').show();
-                    }
+$(document).on('change', '#RETNUM', function() {
+    var retInvNo = $(this).val();
+    console.log("retInvNo:", retInvNo);
+    $.ajax({
+        type: 'GET',
+        url: "{% url 'validate_retainer_invoice' %}",
+        data: {'ret_inv_no': retInvNo},
+        success: function(response) {
+            if (!response.valid) {
+                console.log(response.error);
+                if (response.error === 'Number already used') {
+                    $('#retInvError1').show();
+                } else if (response.error === 'Number not continuous') {
+                    $('#retInvError2').show();
+                } else if (response.error === 'Incorrect code') {
+                    $('#retInvError3').show();
                 }
-            },
-            error: function(xhr, errmsg, err) {
-                console.log(xhr.status + ": " + xhr.responseText);
             }
-        });
+        },
+        error: function(xhr, errmsg, err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
     });
+});
+
+
 
 </script>
 
