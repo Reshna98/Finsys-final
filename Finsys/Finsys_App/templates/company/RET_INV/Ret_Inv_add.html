@@ -258,7 +258,7 @@ textarea::-webkit-scrollbar-thumb:hover {
                                             </div>
                                         </div>
                                         <a href="#">
-                                            <button type="button" class="btn btn-outline-secondary ml-1" data-target="#newItem" data-toggle="modal">+</button>
+                                            <button type="button" class="btn btn-outline-secondary ml-1" data-target="#newitem" data-toggle="modal">+</button>
                                         </a>
                                     </div>
                                 
@@ -780,6 +780,218 @@ textarea::-webkit-scrollbar-thumb:hover {
                                 </div>
                             </div>
                         </div>
+                        <div class="row mt-3">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="agreeTerms" required style="background-color: #43596c;">
+                                    <label for="agreeTerms">Agree to Terms and Conditions</label>
+                                    <div class="invalid-feedback">You must agree before submitting.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-4"></div>
+                            <div class="col-4 d-flex justify-content-center">
+                                <button class="btn btn-outline-secondary text-grey w-75" data-dismiss="modal" type="button" id="customerSave">Save</button>
+                            </div>
+                            <div class="col-4"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>   
+    </div>
+</div>
+<!-- New Item Modal -->
+
+<div class="modal fade" id="newitem">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content" style="background-color: #213b52;">
+            <div class="modal-header">
+                <h5 class="m-3">New Item</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card p-3">
+                    <form method="post" id="ModalItem">
+                        {% csrf_token %}
+                        <form action="" method="post" class="needs-validation"  validate>
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-12 mx-0">
+                                    <div class="row">
+                                        <div class="col-md-6 mt-3">
+                                            <label for="itemName" style="color: white;">Name</label>
+                                            <input type="text" id="itemName" name="name" class="form-control" style="background-color: #2a4964; color: white;" autocomplete="off" required>
+                                        </div>
+                                        <div class="col-md-6 mt-3">
+                                            <label for="itemType" style="color: white;">Type</label>
+                                            <select name="type" class="form-control" id="itemType" style="background-color: #2a4964; color: white;" required>
+                                                <option selected disabled value="">Choose...</option>
+                                                <option value="Goods">Goods</option>
+                                                <option value="Services">Services</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mt-3">
+                                            <label for="itemUnit" style="color: white;">Unit</label>
+                                            <div class="d-flex">
+                                                <select class="custom-select" name="unit" id="itemUnit" required style="background-color: #2a4964; color: white;">
+                                                    <option selected disabled value="">Choose...</option>
+                                                    {% for a in unit %}
+                                                    <option class="text-uppercase">{{ a.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                <a href="#">
+                                                    <button type="button" class="btn btn-outline-secondary ml-1" data-toggle="modal" data-target="#createNewUnit">+</button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mt-3">
+                                            <label for="hsnField" style="color: white;">HSN Code</label>
+                                            <input type="number" name="hsn" class="form-control" style="background-color: #2a4964; color: white;" placeholder="Enter a valid HSN code" required id="hsnField" oninput="validateHSN()">
+                                            <div id="hsnError" style="color: red;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-3 mt-3">
+                                            <label style="color: white;">Tax Reference</label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-check mt-1">
+                                                <input class="form-check-input" name="taxref" type="radio" id="inclusive" value="taxable" onclick="showdiv()" required>
+                                                <label style="color: white;" for="inclusive">taxable</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-check mt-1">
+                                            <input class="form-check-input" name="taxref" type="radio" value="non taxable" id="check" onclick="hidediv()">
+                                            <label style="color: white;" for="check">non taxable</label>
+                                        </div>
+                                    </div>
+                                    <div class="row"  id="taxableDiv" style="display: none;">
+                                        <div class="col-md-6 mt-3">
+                                            <label for="intraStateTax" style="color: white;">Intra State Tax Rate</label>
+                                            <select name="intra_st" class="form-control" style="background-color: #2a4964; color: white;" id="intraStateTax" >
+                                                <option value=0>GST 0 (0%)</option>
+                                                <option value=3>GST 3 (3%)</option>
+                                                <option value=5>GST 5 (5%)</option>
+                                                <option value=12>GST 12 (12%)</option>
+                                                <option value=18>GST 18 (18%)</option>
+                                                <option value=28>GST 28 (28%)</option>        
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mt-3">
+                                            <label for="interStateTax" style="color: white;">Inter State Tax Rate</label>
+                                            <select name="inter_st" class="form-control" style="background-color: #2a4964; color: white;" id="interStateTax" >
+                                                <option value=0>IGST 0 (0%)</option>
+                                                <option value=3>IGST 3 (3%)</option>
+                                                <option value=5>IGST 5 (5%)</option>
+                                                <option value=12>IGST 12 (12%)</option>
+                                                <option value=18>IGST 18 (18%)</option>
+                                                <option value=28>IGST 28 (28%)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mt-3">
+                                            <label style="color: white;">Purchase Price</label>
+                                            <div class="row">
+                                                <div class="col-md-12 d-flex">
+                                                    <input type="text" class="form-control mr-1" value="INR" style="width:60px;background-color: #2a4960; color: white;">
+                                                    <input type="number" name="pcost" class="form-control" id="purprice" style="background-color: #2a4964; color: white;" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mt-3">
+                                            <label style="color: white;">Sales Price</label>
+                                            <div class="row">
+                                                <div class="col-md-12 d-flex">
+                                                    <input type="text" class="form-control mr-1" value="INR" style="width:60px;background-color: #2a4960; color: white;">
+                                                    <input type="text" name="salesprice" class="form-control" id="saleprice" style="background-color: #2a4964; color: white;" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mt-3">
+                                            <label for="purchaseAccount" style="color: white;">Account</label>
+                                            <div class="d-flex">
+                                                <select name="pur_account" class="form-control" style="background-color: #2a4964; color: white;" id="purchaseAccount">
+                                                    <option value="" selected disabled>--Choose--</option>
+                                                    {% for a in account %}
+                                                    <option value="{{ a.account_name }}">{{ a.account_name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                <a href="#">
+                                                    <button type="button" class="btn btn-outline-secondary ml-1" data-toggle="modal" data-target="#createNewAccount">+</button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mt-3">
+                                            <label for="salesAccount" style="color: white;">Account</label>
+                                            <select name="sale_account" class="form-control" style="background-color: #2a4964; color: white;" id="salesAccount">
+                                                <option value="" selected disabled>--Choose--</option>
+                                                <option value="General Income">General Income</option>
+                                                <option value="Interest Income">Interest Income</option>
+                                                <option value="Late Fee Income">Late Fee Income</option>
+                                                <option value="Discount Income">Discount Income</option>
+                                                <option value="Shipping Charges">Shipping Charges</option>
+                                                <option value="Other Charges">Other Charges</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mt-3">
+                                            <label for="purchaseDescription" style="color: white;">Description</label>
+                                            <textarea class="form-control" name="pur_desc" id="purchaseDescription" style="background-color: #2a4964; color: white;"></textarea>  
+                                        </div>
+                                        <div class="col-md-6 mt-3">
+                                            <label for="salesDescription" style="color: white;">Description</label>
+                                            <textarea class="form-control" name="sale_desc" id="salesDescription" style="background-color: #2a4964; color: white;"></textarea>
+                                        </div>
+                                    </div>
+                                                
+                                    <div class="row mt-3" >
+                                        <div class="col-md-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" onclick="ShowHideDiv(this)" type="checkbox"  id="track">
+                                                <label class="form-check-label" for="track">Track Inventory</label>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                    <div class="row" id="inventorytrack" style="display: none">
+                                        <div class="col-md-6 mt-3">
+                                            <label style="color: white;">Inventory Account</label>
+                                            <select name="invacc" class="form-control" style="background-color: #2a4964; color: white;">
+                                                <option selected disabled value="" >Choose...</option>
+                                                <option value="Inventory Assets">Inventory Assets</option>    
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 mt-3">
+                                            <label style="color: white;">Stock on hand</label>
+                                            <input type="number" name="stock" class="form-control" style="background-color: #2a4964; color: white;" value="0">
+                                        </div>
+                                        <div class="col-md-3 mt-3">
+                                            <label style="color: white;">Stock Rate per Unit</label>
+                                            <input type="number" name="stock_rate" class="form-control" style="background-color: #2a4964; color: white;" value="0">
+                                        </div>
+                                    </div>
+            
+                                    <div class="row" >
+                                        <div class="col-md-3 mt-3">
+                                            <label style="color: white;">Minimum Stock to maintain</label>
+                                            <input type="number" name="min_stock" class="form-control" style="background-color: #2a4964; color: white;" value="0">
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </form>
                         <div class="row mt-3">
                             <div class="col">
                                 <div class="form-check">
@@ -1344,12 +1556,115 @@ $(document).on('change', '#RETNUM', function() {
                     $('#retInvError3').show();
                 }
             }
+            else{
+                $('#retInvError3').hide();
+                $('#retInvError2').hide();
+                $('#retInvError1').hide();
+            }
         },
         error: function(xhr, errmsg, err) {
             console.log(xhr.status + ": " + xhr.responseText);
         }
     });
 });
+
+// Item section
+function ShowHideDiv(track) {
+        var inventorytrack = document.getElementById("inventorytrack");
+        inventorytrack.style.display = track.checked ? "flex" : "none";
+    }
+
+    function ShowHideDivi(inclusive) {
+        var inter = document.getElementById("intrastateFiled");
+        inter.style.display = inclusive.checked ? "block" : "none";
+    }
+
+    function validateHSN() {
+        var hsnField = document.getElementById("hsnField");
+        var errorText = document.getElementById("hsnError");
+        var hsnValue = hsnField.value;
+
+        if (hsnValue.length < 6) {
+            errorText.innerText = "HSN must contain at least 6 digits";
+            hsnField.setCustomValidity("HSN must contain at least 6 digits");
+            hsnField.style.borderColor = "red";
+        } else {
+            errorText.innerText = "";
+            hsnField.setCustomValidity(""); 
+            hsnField.style.borderColor = ""; 
+        }
+    }
+
+    function showdiv() {
+        document.getElementById("taxableDiv").style.display = "flex";
+    }
+    
+    function hidediv() {
+        document.getElementById("taxableDiv").style.display = "none";
+    }
+
+
+
+
+$(document).on("click","#saveNewItem",function(){
+    var name = $("#itemName").val();
+    var type = $("#itemType").val();
+    var unit = $("#itemUnit").val();
+    var hsn = $("#hsnField").val();
+    if($('#inclusive').prop('checked') || $('#check').prop('checked')){
+        if($('#inclusive').prop('checked')){
+            var tax = 'taxable'
+        }else{
+            var tax = 'non taxable'
+        }
+    }else{
+        alert("Should select any of tax reference")
+        return
+    }
+
+    if (name !="" && type !="" && unit != "" && hsn != "" && tax != ""){
+        $.ajax({
+            type : 'POST',
+            url:"{% url 'Fin_RETInvoiceItem' %}",
+            data:{
+                'name' : name,
+                'type' : type,
+                'unit' : unit,
+                'hsn' : hsn,
+                'taxref' : tax,
+                'intra_st' : $("#intraStateTax").val(),
+                'inter_st' : $("#interStateTax").val(),
+                'pcost' : $("#purprice").val(),
+                'pur_account' : $("#purchaseAccount").val(),
+                'pur_desc' : $("#purchaseDescription").val(),
+                'salesprice' : $("#saleprice").val(),
+                'sale_account' : $("#salesAccount").val(),
+                'sale_desc' : $("#salesDescription").val(),
+                'invacc' : $("#invAcc").val(),
+                'stock' : $("#stockOnHand").val(),
+                'stock_rate' : $("#stockRate").val(),
+                'min_stock' : $("#minStock").val(),
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            
+            success: function(response) {
+                if(response.status){
+                    console.log("AJAX Success",response)
+                    document.getElementById("newItemForm").reset();
+
+                    reloadItems();
+                }else{
+                    alert(response.message)
+                }
+            },         
+        });
+    }
+    else{
+        alert('Fill all required fields.!')
+        return;
+    }
+});
+
 
 
 

@@ -529,7 +529,7 @@ urlpatterns = [
     path('Fin_RETINV_CustomerData',views.Fin_RETINV_CustomerData,name='Fin_RETINV_CustomerData'),
     path('fetch_bank_account',views.fetch_bank_account,name='fetch_bank_account'),
     path('validate_retainer_invoice',views.validate_retainer_invoice,name='validate_retainer_invoice'),
-    # path('',views.,name=''),
+    path('Fin_RETInvoiceItem',views.Fin_RETInvoiceItem,name='Fin_RETInvoiceItem'),
     # path('',views.,name=''),
     # path('',views.,name=''),
     
