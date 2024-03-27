@@ -17242,15 +17242,7 @@ def Fin_RETInvoiceItem(request):
         minStock = request.POST['min_stock']
         createdDate = date.today()
         
-        #save item and transaction if item or hsn doesn't exists already
-        if Fin_Items.objects.filter(Company=com, name__iexact=name).exists():
-            res = f"{name} already exists, try another!"
-            return JsonResponse({'status': False, 'message':res})
-        elif Fin_Items.objects.filter(Company = com, hsn__iexact = hsn).exists():
-            res = f"HSN - {hsn} already exists, try another.!"
-            return JsonResponse({'status': False, 'message':res})
-        else:
-            item = Fin_Items(
+        item = Fin_Items(
                 Company = com,
                 LoginDetails = data,
                 name = name,
@@ -17276,17 +17268,50 @@ def Fin_RETInvoiceItem(request):
                 stock_unit_rate = stockUnitRate,
                 status = 'Active'
             )
-            item.save()
+        item.save()
 
             #save transaction
 
-            Fin_Items_Transaction_History.objects.create(
+        Fin_Items_Transaction_History.objects.create(
                 Company = com,
                 LoginDetails = data,
                 item = item,
                 action = 'Created'
             )
             
-            return JsonResponse({'status': True})
+        return JsonResponse({'status': True})
     else:
        return redirect('/')
+
+def validate_hsn(request):
+    if 's_id' in request.session:
+        s_id = request.session['s_id']
+        data = Fin_Login_Details.objects.get(id=s_id)
+        if data.User_Type == 'Company':
+            com = Fin_Company_Details.objects.get(Login_Id=s_id)
+        else:
+            com = Fin_Staff_Details.objects.get(Login_Id=s_id).company_id
+        hsn = request.POST.get('hsn')
+        if hsn:
+            if Fin_Items.objects.filter(hsn__iexact=hsn).exists():
+                return JsonResponse({'status': False, 'message': f"HSN - {hsn} already exists, try another."})
+            else:
+                return JsonResponse({'status': True})
+        
+
+def validate_name(request):
+    if 's_id' in request.session:
+        s_id = request.session['s_id']
+        data = Fin_Login_Details.objects.get(id=s_id)
+        if data.User_Type == 'Company':
+            com = Fin_Company_Details.objects.get(Login_Id=s_id)
+        else:
+            com = Fin_Staff_Details.objects.get(Login_Id=s_id).company_id
+   
+        name = request.POST.get('name')
+        if name:
+            if Fin_Items.objects.filter(Company=com, name__iexact=name).exists():
+                return JsonResponse({'status': False, 'message': f"Item with name '{name}' already exists, please choose another name."})
+            else:
+                return JsonResponse({'status': True})
+        

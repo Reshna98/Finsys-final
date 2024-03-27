@@ -250,7 +250,7 @@ textarea::-webkit-scrollbar-thumb:hover {
                                             <div class="p-0 border-0 bg-none position-relative drop-box" style="display: block;">
                                                 <input required type="text" id="item1" value="" name="item_name[]" class="dropdown-toggle form-control item-display" onkeyup="filterFunction($(this).attr('id'))"  data-toggle="dropdown" aria-expanded="false" placeholder="Items.." autocomplete="off">
                                                 <ul class="dropdown-menu w-100 items-available position-absolute" id="menu1"  style="overflow-y: auto; height: fit-content;max-height: 40vh;"> 
-                                                    {% for i in items %}
+                                                    {% for i in item %}
                                                     <li class="dropdown-item items-options" onclick="getItemDetails($(this).parent().prev().attr('id'),`{{i.name}}`)">{{i.name}}</li>
                                                     {% endfor %}
                                                 </ul>
@@ -966,25 +966,25 @@ textarea::-webkit-scrollbar-thumb:hover {
                                     <div class="row" id="inventorytrack" style="display: none">
                                         <div class="col-md-6 mt-3">
                                             <label style="color: white;">Inventory Account</label>
-                                            <select name="invacc" class="form-control" style="background-color: #2a4964; color: white;">
+                                            <select name="invacc" id="invacc" class="form-control" style="background-color: #2a4964; color: white;">
                                                 <option selected disabled value="" >Choose...</option>
                                                 <option value="Inventory Assets">Inventory Assets</option>    
                                             </select>
                                         </div>
                                         <div class="col-md-3 mt-3">
                                             <label style="color: white;">Stock on hand</label>
-                                            <input type="number" name="stock" class="form-control" style="background-color: #2a4964; color: white;" value="0">
+                                            <input type="number" id="stock" name="stock" class="form-control" style="background-color: #2a4964; color: white;" value="0">
                                         </div>
                                         <div class="col-md-3 mt-3">
                                             <label style="color: white;">Stock Rate per Unit</label>
-                                            <input type="number" name="stock_rate" class="form-control" style="background-color: #2a4964; color: white;" value="0">
+                                            <input type="number" name="stock_rate" id="stock_rate" class="form-control" style="background-color: #2a4964; color: white;" value="0">
                                         </div>
                                     </div>
             
                                     <div class="row" >
                                         <div class="col-md-3 mt-3">
                                             <label style="color: white;">Minimum Stock to maintain</label>
-                                            <input type="number" name="min_stock" class="form-control" style="background-color: #2a4964; color: white;" value="0">
+                                            <input type="number" id="min_stock" name="min_stock" class="form-control" style="background-color: #2a4964; color: white;" value="0">
                                         </div>
                                     </div>
                                     
@@ -1005,7 +1005,7 @@ textarea::-webkit-scrollbar-thumb:hover {
                         <div class="row mt-4">
                             <div class="col-4"></div>
                             <div class="col-4 d-flex justify-content-center">
-                                <button class="btn btn-outline-secondary text-grey w-75" data-dismiss="modal" type="button" id="customerSave">Save</button>
+                                <button class="btn btn-outline-secondary text-grey w-75" data-dismiss="modal" type="button" id="saveitem">Save</button>
                             </div>
                             <div class="col-4"></div>
                         </div>
@@ -1606,7 +1606,7 @@ function ShowHideDiv(track) {
 
 
 
-$(document).on("click","#saveNewItem",function(){
+$(document).on("click","#saveitem",function(){
     var name = $("#itemName").val();
     var type = $("#itemType").val();
     var unit = $("#itemUnit").val();
@@ -1640,20 +1640,22 @@ $(document).on("click","#saveNewItem",function(){
                 'salesprice' : $("#saleprice").val(),
                 'sale_account' : $("#salesAccount").val(),
                 'sale_desc' : $("#salesDescription").val(),
-                'invacc' : $("#invAcc").val(),
-                'stock' : $("#stockOnHand").val(),
-                'stock_rate' : $("#stockRate").val(),
-                'min_stock' : $("#minStock").val(),
+                'invacc' : $("#invacc").val(),
+                'stock' : $("#stock").val(),
+                'stock_rate' : $("#stockrate").val(),
+                'min_stock' : $("#min_stock").val(),
                 csrfmiddlewaretoken: '{{ csrf_token }}'
             },
             
             success: function(response) {
                 if(response.status){
                     console.log("AJAX Success",response)
-                    document.getElementById("newItemForm").reset();
+                    document.getElementById("ModalItem").reset();
 
                     reloadItems();
-                }else{
+                }
+                    
+                else{
                     alert(response.message)
                 }
             },         
@@ -1665,7 +1667,51 @@ $(document).on("click","#saveNewItem",function(){
     }
 });
 
+// Function to check HSN uniqueness
+function checkHSN() {
+    var hsn = $("#hsnField").val().trim();
+    if (hsn !== "") {
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'validate_hsn' %}",
+            data: {
+                'hsn': hsn,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function(response) {
+                if (!response.status) {
+                    alert(response.message);
+                }
+            }
+        });
+    }
+}
 
+// Attach checkHSN function to the onchange event of the HSN input field
+$(document).ready(function() {
+    $("#hsnField").on("change", checkHSN);
+});
+function validateName() {
+    var name = $("#itemName").val().trim();
+    if (name !== "") {
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'validate_name' %}",
+            data: {
+                'name': name,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function(response) {
+                if (!response.status) {
+                    alert(response.message);
+                }
+            }
+        });
+    }
+}
+$(document).ready(function() {
+    $("#itemName").on("change", validateName);
+});
 
 
 </script>

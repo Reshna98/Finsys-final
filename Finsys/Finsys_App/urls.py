@@ -530,9 +530,16 @@ urlpatterns = [
     path('fetch_bank_account',views.fetch_bank_account,name='fetch_bank_account'),
     path('validate_retainer_invoice',views.validate_retainer_invoice,name='validate_retainer_invoice'),
     path('Fin_RETInvoiceItem',views.Fin_RETInvoiceItem,name='Fin_RETInvoiceItem'),
+    path('validate_hsn',views.validate_hsn,name='validate_hsn'),
+    path('validate_name',views.validate_name,name='validate_name'),
     # path('',views.,name=''),
     # path('',views.,name=''),
-    
+    # path('',views.,name=''),
+    # path('',views.,name=''),
+    # path('',views.,name=''),
+    # path('',views.,name=''),
+    # path('',views.,name=''),
+    # path('',views.,name=''),
     
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
 ]
