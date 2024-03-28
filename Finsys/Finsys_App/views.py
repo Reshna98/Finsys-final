@@ -17315,3 +17315,20 @@ def validate_name(request):
             else:
                 return JsonResponse({'status': True})
         
+def Fin_Reloaditems(request):
+    if 's_id' in request.session:
+        s_id = request.session['s_id']
+        data = Fin_Login_Details.objects.get(id = s_id)
+        if data.User_Type == 'Company':
+            com = Fin_Company_Details.objects.get(Login_Id=s_id)
+        else:
+            com = Fin_Staff_Details.objects.get(Login_Id = s_id).company_id
+
+        items = {}
+        option_objects = Fin_Items.objects.filter(Company = com, status='Active')
+        for option in option_objects:
+            items[option.id] = [option.name]
+
+        return JsonResponse(items)
+    else:
+        return redirect('/')
