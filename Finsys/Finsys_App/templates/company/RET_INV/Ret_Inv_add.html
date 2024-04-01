@@ -1145,8 +1145,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 
 
 
-
-
    
 <script>
 // customer section
@@ -1943,9 +1941,9 @@ function reloadItems() {
         }
 
     });
-    if ($('#createNewAccount').hasClass('show')){
-        $('#createNewAccount').modal('toggle');
-    }
+    // if ($('#createNewAccount').hasClass('show')){
+    //     $('#createNewAccount').modal('toggle');
+    // }
 
     if ($('#createNewUnit').hasClass('show')){
         $('#createNewUnit').modal('toggle');
@@ -2059,6 +2057,7 @@ $(document).ready(function(){
         }
 
 }
+
 $(document).ready(function() {
     $('#subAccountCheckBox').change(function() {
         if ($(this).is(':checked')) {
@@ -2070,6 +2069,7 @@ $(document).ready(function() {
         }
     });
 });
+
 $(document).on("click","#saveNewAccount",function(){
     var name = $("#accountName").val();
     var type = $("#Account_type").val();
@@ -2125,6 +2125,404 @@ $(document).on("click","#saveNewAccount",function(){
         alert('Account name or Type cannot be blank.!')
     }
 });
+$(document).ready(function(){
+        var Acnt_desc = document.getElementById("acnt-desc");
+        Acnt_desc.innerHTML=`
+            <b>Expense</b> <br>Reflects expenses incurred for running normal business operations, such as :<br/>
+            <ul>
+                <li>1.Advertisements and Marketing</li>
+                <li>2.Business Travel Expenses</li>
+                <li>3.License Fees</li>
+                <li>4.Utility Expenses</li>
+            </ul>`;
+
+            var selectedValue = $('#Account_type').val();
+            $.ajax({
+                type : 'GET',
+                url:"{% url 'Fin_checkAccounts' %}",
+                data:{
+                    type : selectedValue,
+                },
+                
+                success: function(response) {
+                    if(response.status){
+                        $('#subAccountCheck').css('display','block');
+                        var dropdown = $('#parentAccount');
+                        dropdown.empty();
+                        dropdown.append(`<option selected disabled value="">--Choose--</option>`)
+                        $.each(response, function(key, value) {
+                            for(let i=0; i<value.length; i++){
+                                dropdown.append($('<option></option>').text(value[i].name).val(value[i].name))
+                            }
+                        });
+                    }else{
+                        
+                    }
+                },         
+            });
+    })
+    
+    function AccountTypeChange(selectBox) {
+        var selectElement = document.getElementById("Account_type");
+        var selectedValue = selectElement.value;
+        var Acnt_desc = document.getElementById("acnt-desc");
+        var acctype = document.getElementById("acctype");
+
+        switch(selectedValue) {
+            case "Expense":
+                Acnt_desc.innerHTML=`
+                    <b>Expense</b> <br>Reflects expenses incurred for running normal business operations, such as :<br/>
+                    <ul>
+                        <li>1.Advertisements and Marketing</li>
+                        <li>2.Business Travel Expenses</li>
+                        <li>3.License Fees</li>
+                        <li>4.Utility Expenses</li>
+                    </ul>`;
+                    acctype.value="Expense"
+                break;
+            case "Cost Of Goods Sold":
+                Acnt_desc.innerHTML=`
+                    <b>Expense</b> <br>This indicates the direct costs attributable to the production of the goods sold by a company such as:<br/>
+                    <ul>
+                        <li>1.Material and Labor costs</li>
+                        <li>2.Cost of obtaining raw materials</li>
+                    </ul>`;
+                    acctype.value="Expense"
+                break;
+            case "Other Expense":
+                Acnt_desc.innerHTML=`
+                    <b>Expense</b> <br>Track miscellaneous expenses incurred for activities other than primary business operations or create additional accounts to track default expenses like insurance or contribution towards charity.<br/>`;
+                    acctype.value="Expense"
+                break;
+            default:
+            Acnt_desc.innerHTML=`<b>Account Type</b> <br>Select an account type..<br/>`;
+        }
+
+        if(selectedValue !=""){
+            $('#subAccountCheck').css('display','none')
+            $('#subAccountCheckBox').prop('checked', $('#subAccountCheckBox').prop('checked') ? false : false);
+            $('#parentAccountValue').css('display','none');
+
+            $.ajax({
+                type : 'GET',
+                url:"{% url 'Fin_checkAccounts' %}",
+                data:{
+                    type : selectedValue,
+                },
+                
+                success: function(response) {
+                    if(response.status){
+                        $('#subAccountCheck').css('display','block');
+                        var dropdown = $('#parentAccount');
+                        dropdown.empty();
+                        dropdown.append(`<option selected disabled value="">--Choose--</option>`)
+                        $.each(response, function(key, value) {
+                            for(let i=0; i<value.length; i++){
+                                dropdown.append($('<option></option>').text(value[i].name).val(value[i].name))
+                            }
+                        });
+                    }else{
+                        
+                    }
+                },         
+            });
+
+        }
+
+}
+
+$(document).ready(function() {
+    $('#subAccountCheckBox').change(function() {
+        if ($(this).is(':checked')) {
+            $('#parentAccountValue').css('display','block');
+            $('#parentAccount').prop('required',true);
+        } else {
+            $('#parentAccountValue').css('display','none');
+            $('#parentAccount').prop('required',false);
+        }
+    });
+});
+
+$(document).on("click","#saveNewAccount",function(){
+    var name = $("#accountName").val();
+    var type = $("#Account_type").val();
+    var code = $("#account_code").val();
+    var desc = $("#description").val();
+    var subAcc = $("#subAccountCheckBox").prop('checked');
+    var parentAcc = $("#parentAccount").val();
+    console.log(name,type,code,desc,subAcc,parentAcc);
+
+    if(subAcc && (parentAcc =="" || parentAcc == undefined) ){
+        alert('Select a parent account.!')
+        return;
+    }
+
+    if (name !="" && type !="" ){
+        $.ajax({
+            type : 'POST',
+            url:"{% url 'Fin_createNewAccountFromItems' %}",
+            data:{
+                'account_name' : name,
+                'account_type' : type,
+                'account_code' : code,
+                'subAccountCheckBox' : subAcc,
+                'parent_account' : parentAcc,
+                'description' : desc,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            
+            success: function(response) {
+                if(response.status){
+                    document.getElementById("newAccountForm").reset();
+                    
+                    var dropdown = $('#purchaseAccount');
+                    dropdown.empty();
+                    dropdown.append(`<option value="" disabled>--Choose--<option/>`);
+                    $.each(response, function(key, value) {
+                        for(let i=0; i<value.length; i++){
+                            if(value[i].name == name){
+                                dropdown.append($('<option selected></option>').text(value[i].name).val(value[i].name))
+                            }else{
+                                dropdown.append($('<option></option>').text(value[i].name).val(value[i].name))
+                            }   
+                        }
+                    });
+
+                }else{
+                    alert("Something went wrong.!")
+                }
+            },         
+        });
+    }
+    else{
+        alert('Account name or Type cannot be blank.!')
+    }
+});
+   $(document).ready(function(){
+        var Acnt_desc = document.getElementById("acnt-desc");
+        Acnt_desc.innerHTML=`
+            <b>Expense</b> <br>Reflects expenses incurred for running normal business operations, such as :<br/>
+            <ul>
+                <li>1.Advertisements and Marketing</li>
+                <li>2.Business Travel Expenses</li>
+                <li>3.License Fees</li>
+                <li>4.Utility Expenses</li>
+            </ul>`;
+
+            var selectedValue = $('#Account_type').val();
+            $.ajax({
+                type : 'GET',
+                url:"{% url 'Fin_checkAccounts' %}",
+                data:{
+                    type : selectedValue,
+                },
+                
+                success: function(response) {
+                    if(response.status){
+                        $('#subAccountCheck').css('display','block');
+                        var dropdown = $('#parentAccount');
+                        dropdown.empty();
+                        dropdown.append(`<option selected disabled value="">--Choose--</option>`)
+                        $.each(response, function(key, value) {
+                            for(let i=0; i<value.length; i++){
+                                dropdown.append($('<option></option>').text(value[i].name).val(value[i].name))
+                            }
+                        });
+                    }else{
+                        
+                    }
+                },         
+            });
+    })
+    
+    function AccountTypeChange(selectBox) {
+        var selectElement = document.getElementById("Account_type");
+        var selectedValue = selectElement.value;
+        var Acnt_desc = document.getElementById("acnt-desc");
+        var acctype = document.getElementById("acctype");
+
+        switch(selectedValue) {
+            case "Expense":
+                Acnt_desc.innerHTML=`
+                    <b>Expense</b> <br>Reflects expenses incurred for running normal business operations, such as :<br/>
+                    <ul>
+                        <li>1.Advertisements and Marketing</li>
+                        <li>2.Business Travel Expenses</li>
+                        <li>3.License Fees</li>
+                        <li>4.Utility Expenses</li>
+                    </ul>`;
+                    acctype.value="Expense"
+                break;
+            case "Cost Of Goods Sold":
+                Acnt_desc.innerHTML=`
+                    <b>Expense</b> <br>This indicates the direct costs attributable to the production of the goods sold by a company such as:<br/>
+                    <ul>
+                        <li>1.Material and Labor costs</li>
+                        <li>2.Cost of obtaining raw materials</li>
+                    </ul>`;
+                    acctype.value="Expense"
+                break;
+            case "Other Expense":
+                Acnt_desc.innerHTML=`
+                    <b>Expense</b> <br>Track miscellaneous expenses incurred for activities other than primary business operations or create additional accounts to track default expenses like insurance or contribution towards charity.<br/>`;
+                    acctype.value="Expense"
+                break;
+            default:
+            Acnt_desc.innerHTML=`<b>Account Type</b> <br>Select an account type..<br/>`;
+        }
+
+        if(selectedValue !=""){
+            $('#subAccountCheck').css('display','none')
+            $('#subAccountCheckBox').prop('checked', $('#subAccountCheckBox').prop('checked') ? false : false);
+            $('#parentAccountValue').css('display','none');
+
+            $.ajax({
+                type : 'GET',
+                url:"{% url 'Fin_checkAccounts' %}",
+                data:{
+                    type : selectedValue,
+                },
+                
+                success: function(response) {
+                    if(response.status){
+                        $('#subAccountCheck').css('display','block');
+                        var dropdown = $('#parentAccount');
+                        dropdown.empty();
+                        dropdown.append(`<option selected disabled value="">--Choose--</option>`)
+                        $.each(response, function(key, value) {
+                            for(let i=0; i<value.length; i++){
+                                dropdown.append($('<option></option>').text(value[i].name).val(value[i].name))
+                            }
+                        });
+                    }else{
+                        
+                    }
+                },         
+            });
+
+        }
+
+}
+
+$(document).ready(function() {
+    $('#subAccountCheckBox').change(function() {
+        if ($(this).is(':checked')) {
+            $('#parentAccountValue').css('display','block');
+            $('#parentAccount').prop('required',true);
+        } else {
+            $('#parentAccountValue').css('display','none');
+            $('#parentAccount').prop('required',false);
+        }
+    });
+});
+
+$(document).on("click","#saveNewAccount",function(){
+    var name = $("#accountName").val();
+    var type = $("#Account_type").val();
+    var code = $("#account_code").val();
+    var desc = $("#description").val();
+    var subAcc = $("#subAccountCheckBox").prop('checked');
+    var parentAcc = $("#parentAccount").val();
+    console.log(name,type,code,desc,subAcc,parentAcc);
+
+    if(subAcc && (parentAcc =="" || parentAcc == undefined) ){
+        alert('Select a parent account.!')
+        return;
+    }
+
+    if (name !="" && type !="" ){
+        $.ajax({
+            type : 'POST',
+            url:"{% url 'Fin_createNewAccountFromItems' %}",
+            data:{
+                'account_name' : name,
+                'account_type' : type,
+                'account_code' : code,
+                'subAccountCheckBox' : subAcc,
+                'parent_account' : parentAcc,
+                'description' : desc,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            
+            success: function(response) {
+                if(response.status){
+                    document.getElementById("newAccountForm").reset();
+                    
+                    var dropdown = $('#purchaseAccount');
+                    dropdown.empty();
+                    dropdown.append(`<option value="" disabled>--Choose--<option/>`);
+                    $.each(response, function(key, value) {
+                        for(let i=0; i<value.length; i++){
+                            if(value[i].name == name){
+                                dropdown.append($('<option selected></option>').text(value[i].name).val(value[i].name))
+                            }else{
+                                dropdown.append($('<option></option>').text(value[i].name).val(value[i].name))
+                            }   
+                        }
+                    });
+
+                }else{
+                    alert("Something went wrong.!")
+                }
+            },         
+        });
+    }
+    else{
+        alert('Account name or Type cannot be blank.!')
+    }
+});
+// item unit
+$(document).on("click","#saveItemUnit",function(){
+        var name = $("#unit_name").val();
+        if (name !=""){
+            $.ajax({
+                type : 'POST',
+                url:"{% url 'Fin_saveItemUnit' %}",
+                data:{
+                    'name' : name,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                
+                success: function(response) {
+                    if(response.status){
+                        document.getElementById("newUnitForm").reset();
+                        reloadUnits();
+                    }else{
+                        alert(response.message)
+                    }
+                },         
+            });
+        }
+        else{
+            alert('Invalid')
+        }
+    });
+
+    function reloadUnits() {
+        $.ajax({
+            url: "{% url 'Fin_getItemUnits' %}",
+            type: "GET",
+            dataType: "json",
+            data: $(this).serialize(),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+
+            success: function(data) {
+                console.log("AJAX Success - Dropdown Data:", data);
+                var dropdown = $('#itemUnit');
+                dropdown.empty()
+                dropdown.append(`<option selected disabled value="">Choose...</option>`);
+                $.each(data, function(key, value) {
+                    for(let i=0; i<value.length; i++){
+                        dropdown.append($('<option></option>').attr('class', 'text-uppercase').text(value[i].name))
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
+
 </script>
 
 
