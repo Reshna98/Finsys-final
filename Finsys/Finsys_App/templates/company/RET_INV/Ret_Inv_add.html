@@ -101,7 +101,7 @@ textarea::-webkit-scrollbar-thumb:hover {
                 <div class="col-md-4 ">
                     <label class="col-form-label mt-2">Customer</label>
                                 <div class="d-flex">
-                                    <select name="customer" id="customer" class="form-control" >
+                                    <select name="customer_id" id="customer" class="form-control" >
                                         <option value="0">Select Customer</option>
                                         {% for c in customer %}
                                                 <option value="{{ c.id }}">{{ c.title }} {{ c.first_name }} {{ c.last_name }}</option>
@@ -229,7 +229,7 @@ textarea::-webkit-scrollbar-thumb:hover {
             </div>
             <div class="row clearfix ">
                 <div class="col-md-12 table-responsive-md mt-3">
-                    <table class="table table-bordered table-hover mt-3" id="invoiceItemsTable">
+                    <table class="table table-bordered table-hover mt-3" id="ItemsTable">
                         <thead>
                             <tr>
                                 <th class="text-center">#</th>
@@ -283,7 +283,7 @@ textarea::-webkit-scrollbar-thumb:hover {
                                     <input type="number" name='discount[]'  placeholder='Enter Discount' id="disc1" value=0 class="form-control disc" step=0 min=0 style="background-color: #43596c;  color: white;"  />
                                 </td>
                                 <td >
-                                    <input type="text" name='description[]'  placeholder='Enter Description' id="desc" class="form-control desc" style="background-color: #43596c;  color: white;"/>
+                                    <input type="text" name='description[]'  placeholder='Enter Description' id="desc1" class="form-control desc" style="background-color: #43596c;  color: white;"/>
                                 </td>
 
                                 <td><input type="number" name='total[]' id="total1" class="form-control total" value=0 readonly style="background-color: #43596c; color: white;" /></td>
@@ -306,35 +306,35 @@ textarea::-webkit-scrollbar-thumb:hover {
                     <input type="file" name="file"  style="margin-top: 10px; width: 70%;">
                 </div>            
                 <div class="col-md-1"></div>
-                <div class="col-md-5 table-responsive-md mt-3 " id="invoiceItemsTableTotal" style="background-color:rgba(0,0,0,.4); border: 1px solid rgba(128, 128, 128, 0.6); margin-left: -2vh;">
+                <div class="col-md-5 table-responsive-md mt-3 " id="ItemsTableTotal" style="background-color:rgba(0,0,0,.4); border: 1px solid rgba(128, 128, 128, 0.6); margin-left: -2vh;">
                     <div class="p-3">
                         <div class="row container-fluid p-2 m-0">
                             <div class="col-sm-4 mt-2"><label class="text-center">Sub Total</label></div>
                             <div class="col-sm-1 mt-2">:</div>
-                            <div class="col-sm-7 mt-2"><input type="number" step="any" name='subtotal' value=0.00 readonly style="background-color: #37444f;" class="form-control" id="sub_total"></div>
+                            <div class="col-sm-7 mt-2"><input type="number" step="any" name='sub_total' value=0.00 readonly style="background-color: #37444f;" class="form-control" id="sub_total"></div>
                         </div>
                 
                         <div class="row container-fluid p-2 m-0">
                             <div class="col-sm-4 mt-2"><label for="a" class="text-center">Adjustment</label></div>
                             <div class="col-sm-1 mt-2">:</div>
-                            <div class="col-sm-7 mt-2"><input type="number" step="any" name='adj' id="adj" value=0.00 class="form-control"/></div>
+                            <div class="col-sm-7 mt-2"><input type="number" step="any" name='adjustment' id="adj" value=0.00 class="form-control"/></div>
                         </div>
                         <div class="row container-fluid p-2 m-0">
                             <div class="col-sm-4 mt-2"><label for="a" class="text-center">Grand Total</label></div>
                             <div class="col-sm-1 mt-2">:</div>
-                            <div class="col-sm-7 mt-2"><input type="number" name='grandtotal' id="grandtotal" value=0.00 readonly style="background-color: #37444f;" class="form-control"/></div>
+                            <div class="col-sm-7 mt-2"><input type="number" name='grand_total' id="grandtotal" value=0.00 readonly style="background-color: #37444f;" class="form-control"/></div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-7"></div>
-                <div class="col-md-5 table-responsive-md mt-3 " id="invoiceItemsTablePaid" style="background-color:rgba(0,0,0,.4); border: 1px solid rgba(128, 128, 128, 0.6); margin-left: -2vh;">
+                <div class="col-md-5 table-responsive-md mt-3 " id="ItemsTablePaid" style="background-color:rgba(0,0,0,.4); border: 1px solid rgba(128, 128, 128, 0.6); margin-left: -2vh;">
                     <div class="p-3">
                         <div class="row container-fluid p-2 m-0">
                             <div class="col-sm-4 mt-2"><label for="a" class="text-center">Paid Off</label></div>
                             <div class="col-sm-1 mt-2">:</div>
-                            <div class="col-sm-7 mt-2"><input type="number" step="any" name='advance' id="advance"  value=0.00 class="form-control"/></div>
+                            <div class="col-sm-7 mt-2"><input type="number" step="any" name='paid_amount' id="advance"  value=0.00 class="form-control"/></div>
                         </div>
                         <div class="row container-fluid p-2 m-0">
                             <div class="col-sm-4 mt-2"><label for="a" class="text-center">Balance</label></div>
@@ -1761,6 +1761,7 @@ $(document).on('click','.remove_row',function(){
     var row_id = $(this).attr("id");
     $('#tab_row'+row_id).remove();
     updateSerialNumbers(); 
+    calc();
 });
 function ShowHideDiv(track) {
         var inventorytrack = document.getElementById("inventorytrack");
@@ -2522,6 +2523,155 @@ $(document).on("click","#saveItemUnit",function(){
             }
         });
     }
+
+
+    function getItemDetails(inpId, value) {
+    var itm = value;
+    var exists = false;
+
+    $('#items-table-body tr').each(function () {
+        var html = $(this).html();
+        if (html != '') {
+            var itemName = $(this).find('.item-display').val();
+            console.log(itm, itemName);
+            if (itemName == itm) {
+                exists = true;
+                console.log('exists', exists);
+            }
+        }
+    });
+    console.log('status', exists);
+
+    if (!exists) {
+        var n = inpId.slice(4);
+        $.ajax({
+            url: "{% url 'Fin_RETINVItemDetails' %}",
+            type: 'GET',
+            data: {
+                item: value,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (response) {
+                if (response.status) {
+                    $('#' + inpId).val(value);
+                    document.getElementById('itemId' + n).value = response.id;
+                    document.getElementById('hsn' + n).value = response.hsn;
+                    document.getElementById('qtyspan' + n).innerHTML = response.avl;
+                    document.getElementById('avl' + n).innerHTML = response.avl;
+                    document.getElementById('price' + n).value = response.sales_rate;
+                    calc();
+                }
+            },
+        });
+    } else {
+        alert('Item already exists in the Retainer Invoice, choose another or change quantity.!')
+    }
+}
+
+
+    function changeItemQty(id){
+        id_val = id.slice(3)
+        var qty = document.getElementById(id).value;
+        var avl_val = document.getElementById(`avl${id_val}`).innerText;
+    
+        if( parseInt(qty) > parseInt(avl_val) ){
+            alert("Quantity Greater than Available Quantity")
+            document.getElementById(id).value = avl_val;
+            calc()
+        }else{
+            document.getElementById(`qtyspan${id_val}`).textContent = parseInt(avl_val) - parseInt(qty);
+        }
+    }
+
+    $(document).ready(function(){
+        $('#items-table-body').on('keyup change', function () {
+           
+            calc();
+        });
+    });
+
+    $(document).ready(function(){
+        $(document).on("blur", ".disc", function(){
+            if($(this).val() != ""){
+            }else{
+            $(this).val(0);
+            calc();
+            }
+        }); 
+    });
+// calculation
+
+function calc() {
+        $('#ItemsTable tbody tr').each(function () {
+            var html = $(this).html();
+            if (html != '') {
+                var qty = $(this).find('.qty').val();
+                var dis = $(this).find('.disc').val();
+                var price = $(this).find('.price').val();
+
+                $(this).find('.total').val((parseFloat(qty) * parseFloat(price)) - parseFloat(dis));
+                calc_total();
+            }
+        });
+    }
+
+    function calc_total() {
+            
+        total = 0;
+        $('.total').each(function () {
+            total += parseFloat($(this).val());
+        });
+        $('#sub_total').val(total.toFixed(2));
+      
+        var adj_val = parseFloat($('#adj').val())
+        var gtot =  total + adj_val;
+
+        $('#grandtotal').val(gtot.toFixed(2));
+        
+        var adv_val = parseFloat($('#advance').val())
+        var bal = gtot - adv_val
+        $('#balance').val(bal.toFixed(2));
+        
+    }
+
+   
+    $(document).ready(function(){
+        $(document).on("keyup", "#adj", function(){
+            var subtot = $('#sub_total').val();
+            var adj = $("#adj").val();
+            $('#grandtotal').val((parseFloat(subtot)+parseFloat(adj)).toFixed(2));
+            $('#balance').val((parseFloat($("#grandtotal").val())-parseFloat($("#advance").val())).toFixed(2))
+        });
+
+        $(document).on("blur", "#adj", function(){
+            if($(this).val() != ""){
+            }else{
+            $(this).val(0);
+            calc_total();
+            }
+        }); 
+    });
+
+    $(document).ready(function() {
+        $("#advance").on('keyup change',function() {
+            var tot_val = $('#grandtotal').val();
+            var adv_val = $('#advance').val();
+            if(adv_val !=""){
+                if (parseFloat(tot_val) < parseFloat(adv_val)){
+                    $('#advance').val(parseFloat(tot_val))
+                    $('#balance').val(0);
+                    alert("Advance Greater than Total Amount")
+        
+                }else{
+                    var bal = parseFloat(tot_val) - parseFloat(adv_val)
+                    $('#balance').val(bal.toFixed(2));
+                }
+            }else{
+                $('#balance').val(parseFloat(tot_val));
+            }
+            
+        })
+    });
 
 </script>
 

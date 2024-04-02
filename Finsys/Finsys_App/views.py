@@ -16843,12 +16843,12 @@ def Fin_RET_INV_Listout(request):
             com = Fin_Company_Details.objects.get(Login_Id = s_id)
             allmodules = Fin_Modules_List.objects.get(Login_Id = s_id,status = 'New')
             ret_inv = Fin_Retainer_Invoice.objects.filter(Company = com)
-            return render(request,'company/RET_INV/Ret_Inv_Listout.html',{'allmodules':allmodules,'com':com,'data':data,' ret_inv': ret_inv})
+            return render(request,'company/RET_INV/Ret_Inv_Listout.html',{'allmodules':allmodules,'com':com,'data':data,'ret_inv': ret_inv})
         else:
             com = Fin_Staff_Details.objects.get(Login_Id = s_id)
             allmodules = Fin_Modules_List.objects.get(company_id = com.company_id,status = 'New')
             ret_inv = Fin_Retainer_Invoice.objects.filter(Company = com.company_id)
-            return render(request,'company/RET_INV/Ret_Inv_Listout.html',{'allmodules':allmodules,'com':com,'data':data,' ret_inv': ret_inv})
+            return render(request,'company/RET_INV/Ret_Inv_Listout.html',{'allmodules':allmodules,'com':com,'data':data,'ret_inv': ret_inv})
     else:
        return redirect('/')
 
@@ -16870,7 +16870,7 @@ def Fin_RET_INV_Add(request):
         if latest_ret_inv:
          
             prefix = 'RETINV'  
-            numeric_part = int(latest_ret_inv.ret_inv_no[len(prefix):]) 
+            numeric_part = int(latest_ret_inv.Retainer_Invoice_number[len(prefix):]) 
             next_numeric_part = numeric_part + 1  
             ret_inv_no = f"{prefix}{next_numeric_part}"  
         else:
@@ -16943,30 +16943,31 @@ def Fin_Create_RET_INV(request):
         else:
             com = Fin_Staff_Details.objects.get(Login_Id = s_id).company_id
         if request.method == 'POST':
-            customer_id = request.POST.get('customer_id')
-            select_customer = Fin_Customers.objects.get(id=customer_id)
-            customer_email = request.POST.get('customerEmail'),
-            billing_address = request.POST.get('bill_address'),
-            gst_type = request.POST.get('gst_type'),
-            gstin = request.POST.get('gstin'),
-            place_of_supply = request.POST.get('place_of_supply'),
+            customer = Fin_Customers.objects.get(id=request.POST.get('customer_id'))
+            customer_email = request.POST.get('customerEmail')
+            billing_address = request.POST.get('bill_address')
+            gst_type = request.POST.get('gst_type')
+            gstin = request.POST.get('gstin')
+            place_of_supply = request.POST.get('place_of_supply')
             ret_inv_no = request.POST.get('ret_inv_no')
             reference_no=request.POST.get('reference_no')
             ret_inv_date = request.POST.get('ret_inv_date')
-            payment_method=request.POST.get('payment_method')
-            upi=request.POST.get('upi')
-            cheque=request.POST.get('cheque')
-            acc_no=request.POST.get('a/c_no')            
-            sub_total=request.POST.get('sub_total')
-            adjustment=request.POST.get('adjustment')
-            grand_total=request.POST.get('grand_total')
+            payment_method = None if request.POST.get('payment_method') == "" else request.POST.get('payment_method')
+            upi = None if request.POST.get('upi') == "" else request.POST.get('upi')
+            acc_no = None if request.POST.get('a/c_no')   == "" else request.POST.get('a/c_no')
+            cheque = None if request.POST.get('cheque') == "" else request.POST.get('cheque')
+            sub_total = 0.0 if request.POST.get('sub_total') == "" else float(request.POST.get('sub_total'))
+            adjustment = 0.0 if request.POST.get('adjustment') == "" else float(request.POST.get('adjustment'))
+            grand_total = 0.0 if request.POST.get('grand_total') == "" else float(request.POST.get('grand_total'))
+            paid_amount= 0.0 if request.POST.get('paid_amount') == "" else float(request.POST.get('paid_amount'))
+            balance = request.POST.get('grand_total') if request.POST.get('balance') == "" else request.POST.get('balance')
             note=request.POST.get('note')
-            paid_amount=request.POST.get('paid_amount')
-            balance = round(float(grand_total - paid_amount), 3)
             sent = request.POST.get('Sent')
             draft = request.POST.get('Draft')
             ret_inv = Fin_Retainer_Invoice(
-                Customer=select_customer,
+                Company = com,
+                LoginDetails = com.Login_Id,
+                Customer=customer,
                 Customer_email=customer_email,
                 Customer_billing_address=billing_address,
                 Customer_gst_type=gst_type,
@@ -16985,7 +16986,6 @@ def Fin_Create_RET_INV(request):
                 Grand_total=grand_total,
                 Paid_amount=paid_amount,
                 Balance=balance,
-                Company=com,
             )
 
             ret_inv.save()
@@ -17021,14 +17021,13 @@ def Fin_Create_RET_INV(request):
                     item.current_stock -= int(ele[3])
                     item.save()
             
-            
-                    
-            Fin_Retainer_Invoice.objects.create(
+            Fin_Retainer_Invoice_History.objects.create(
                 Company = com,
                 LoginDetails = data,
-                Fin_Retainer_Invoice_History= ret_inv,
+                Ret_Invoice = ret_inv,
                 action = 'Created'
             )
+
 
             return redirect(Fin_RET_INV_Listout)
         else:
@@ -17332,3 +17331,28 @@ def Fin_Reloaditems(request):
         return JsonResponse(items)
     else:
         return redirect('/')
+
+def Fin_RETINVItemDetails(request):
+    if 's_id' in request.session:
+        s_id = request.session['s_id']
+        data = Fin_Login_Details.objects.get(id = s_id)
+        if data.User_Type == "Company":
+            com = Fin_Company_Details.objects.get(Login_Id = s_id)
+        else:
+            com = Fin_Staff_Details.objects.get(Login_Id = s_id).company_id
+        
+        itemName = request.GET['item']
+        item = Fin_Items.objects.get(Company = com, name = itemName)
+
+       
+        context = {
+            'status':True,
+            'id': item.id,
+            'hsn':item.hsn,
+            'sales_rate':item.selling_price,
+            'avl':item.current_stock,
+
+        }
+        return JsonResponse(context)
+    else:
+       return redirect('/')

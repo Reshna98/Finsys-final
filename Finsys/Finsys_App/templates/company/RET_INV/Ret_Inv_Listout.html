@@ -51,10 +51,13 @@
                 </div>
                
             </div>
-            <div class="container-fluid">
-                <table class="table table-responsive-md mt-4 table-hover">
+            
+            <div class="table-responsive">
+                <table class="table table-responsive-md mt-4 table-hover" style="text-align: center">
+
                     <thead>
-                        <tr>
+                       <tr>
+                            <th style="text-align: center;">#</th>
                             <th style="text-align: center;">Date</th>
                             <th style="text-align: center;">Retainer Invoice No</th>
                             <th style="text-align: center;">Customer Name</th>
@@ -66,7 +69,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Your table content goes here -->
+                        
+                        {% for i in ret_inv %}
+                        <tr class="clickable-row" data-href="" style="cursor: pointer;">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{i.Retainer_Invoice_date}}</td>
+                            <td>{{i.Retainer_Invoice_number}}</td>
+                            <td>{{ i.Customer.first_name }} {{ i.Customer.last_name }}</td>
+                            <td>{{ i.Customer_email }} </td>
+                            <td>{{i.Grand_total}}</td>
+                            <td>{{ i.status }}</td>
+                            <td>{{ i.Balance }}</td>
+                        {% endfor %}
+                    </tr>
                     </tbody>
                 </table>
             </div>
