@@ -1459,7 +1459,7 @@ class Fin_Retainer_Invoice(models.Model):
     Customer_gstin = models.CharField(max_length=100,null=True,blank=True,default=None)
     Customer_place_of_supply = models.CharField(max_length=100,null=True,blank=True)
     Retainer_Invoice_number= models.CharField(max_length=100,null=True,blank=True,default=None)
-    Retainer_Invoice_date = models.DateTimeField(auto_now_add=True,null=True)
+    Retainer_Invoice_date = models.DateField(null=True, blank=True)
     Reference_number= models.IntegerField(null=True)
     Payment_Method= models.CharField(max_length=10,null=True,blank=True)
     Cheque_number= models.CharField(max_length=100,null=True,blank=True)
