@@ -1513,3 +1513,4 @@ class Fin_Retainer_Invoice_Comments(models.Model):
     Company = models.ForeignKey(Fin_Company_Details, on_delete=models.CASCADE, null=True)
     LoginDetails = models.ForeignKey(Fin_Login_Details, on_delete=models.CASCADE, null=True)
     Ret_Invoice = models.ForeignKey(Fin_Retainer_Invoice,on_delete=models.CASCADE,null=True,blank=True)
+    comments = models.CharField(max_length=500,null=True,blank=True)

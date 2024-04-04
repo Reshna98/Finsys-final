@@ -24,7 +24,7 @@
                         <div class="dropdown ml-1">
                             <button type="button" class="btn btn-outline-secondary dropdown-toggle text-grey" data-toggle="dropdown">Sort by</button>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item"  style="height: 40px; font-size: 15px; color: white; text-align: center;"onclick="sortTable('reset')">All</a>
+                                <a class="dropdown-item"  style="height: 40px; font-size: 15px; color: white; text-align: center;">All</a>
                                 <a class="dropdown-item"  style="height: 40px; font-size: 15px; color: white; text-align: center;"onclick="sortTable(3)">Customer Name</a>
                                 <a class="dropdown-item"  style="height: 40px; font-size: 15px; color: white; text-align: center;"onclick="sortTable(2)">Retainer Invoice No</a>
                             </div>
@@ -71,7 +71,7 @@
                     <tbody>
                         
                         {% for i in ret_inv %}
-                        <tr class="clickable-row" data-href="" style="cursor: pointer;">
+                        <tr class="clickable-row" data-href="{% url 'Fin_RI_Overview' i.id %}" style="cursor: pointer;">
                             <td>{{ forloop.counter }}</td>
                             <td>{{i.Retainer_Invoice_date}}</td>
                             <td>{{i.Retainer_Invoice_number}}</td>
@@ -115,73 +115,35 @@
     });
   });
 
+
+
+
   function sortTable(columnIndex) {
     var table, rows, switching, i, x, y, shouldSwitch;
     table = document.getElementById("ri");
-
-    if (columnIndex === 'reset') {
-        // Reset the table to its original order
-        rows = table.rows;
-        for (i = 1; i < rows.length - 1; i++) {
-            for (var j = i + 1; j < rows.length; j++) {
-                if (rows[i].rowIndex > rows[j].rowIndex) {
-                    rows[i].parentNode.insertBefore(rows[j], rows[i]);
-                }
-            }
-        }
-        return;
-    }
-
     switching = true;
+
     while (switching) {
-        switching = false;
-        rows = table.rows;
+      switching = false;
+      rows = table.rows;
 
-        for (i = 1; i < rows.length - 1; i++) {
-            shouldSwitch = false;
-            x = rows[i].getElementsByTagName("td")[columnIndex].textContent.toLowerCase();
-            y = rows[i + 1].getElementsByTagName("td")[columnIndex].textContent.toLowerCase();
+      for (i = 1; i < (rows.length - 1); i++) {
+        shouldSwitch = false;
+        x = rows[i].getElementsByTagName("td")[columnIndex].textContent.toLowerCase();
+        y = rows[i + 1].getElementsByTagName("td")[columnIndex].textContent.toLowerCase();
 
-            if (x > y) {
-                shouldSwitch = true;
-                break;
-            }
+        if (x > y) {
+            shouldSwitch = true;
+            break;
         }
+      }
 
-        if (shouldSwitch) {
-            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-            switching = true;
-        }
+      if (shouldSwitch) {
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+      }
     }
-}
-
-
-//   function sortTable(columnIndex) {
-//     var table, rows, switching, i, x, y, shouldSwitch;
-//     table = document.getElementById("ri");
-//     switching = true;
-
-//     while (switching) {
-//       switching = false;
-//       rows = table.rows;
-
-//       for (i = 1; i < (rows.length - 1); i++) {
-//         shouldSwitch = false;
-//         x = rows[i].getElementsByTagName("td")[columnIndex].textContent.toLowerCase();
-//         y = rows[i + 1].getElementsByTagName("td")[columnIndex].textContent.toLowerCase();
-
-//         if (x > y) {
-//             shouldSwitch = true;
-//             break;
-//         }
-//       }
-
-//       if (shouldSwitch) {
-//         rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-//         switching = true;
-//       }
-//     }
-//   }
+  }
 
   function filterTable(row,filterValue) {
     var table = document.getElementById("ri");

@@ -17356,3 +17356,26 @@ def Fin_RETINVItemDetails(request):
         return JsonResponse(context)
     else:
        return redirect('/')
+
+def Fin_RI_Overview(request, id):
+    if 's_id' in request.session:
+        s_id = request.session['s_id']
+        data = Fin_Login_Details.objects.get(id = s_id)
+        ri = Fin_Retainer_Invoice.objects.get(id = id)
+        cmt = Fin_Retainer_Invoice_Comments.objects.filter(Ret_Invoice = ri)
+        history = Fin_Retainer_Invoice_History.objects.filter(Ret_Invoice =ri).last()
+        riItems = Fin_Retainer_Invoice_Items.objects.filter(Ret_Inv = ri)
+        created = Fin_Retainer_Invoice_History.objects.get(Ret_Invoice =ri, action = 'Created')
+
+        if data.User_Type == "Company":
+            com = Fin_Company_Details.objects.get(Login_Id = s_id)
+            cmp = com
+            allmodules = Fin_Modules_List.objects.get(Login_Id = s_id,status = 'New')
+        else:
+            com = Fin_Staff_Details.objects.get(Login_Id = s_id)
+            cmp = com.company_id
+            allmodules = Fin_Modules_List.objects.get(company_id = cmp,status = 'New')
+        
+        return render(request,'company/RET_INV/RET_INV_overview.html',{'allmodules':allmodules,'com':com,'cmp':cmp, 'data':data, 'Ret_Invoice':ri,'riItems':riItems, 'history':history, 'comments':cmt, 'created':created})
+    else:
+       return redirect('/')
