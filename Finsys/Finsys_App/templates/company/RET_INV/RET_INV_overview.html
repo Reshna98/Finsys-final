@@ -358,7 +358,7 @@
                                 <div class="card-title">
                                     <div class="row">
                                         <div class="col mt-3">
-                                            <h2 class="mb-0"># {{ invoice.invoice_no }}</h2>
+                                            <h2 class="mb-0"># {{Ret_Invoice.Retainer_Invoice_number }}</h2>
                                         </div>
                                     </div>
                                 </div>
@@ -411,54 +411,46 @@
                                     <div class="col-md-4 mt-3"></div>
     
                                     <div class="col-md-3 mt-3">
-                                        <h6 class="mb-0">Invoice No</h6>
+                                        <h6 class="mb-0">Retainer Invoice No</h6>
                                     </div>
                                     <div class="col-md-3 mt-3">
-                                        <p class="mb-0 text-right">{{ invoice.invoice_no  }}</p>
+                                        <p class="mb-0 text-right">{{Ret_Invoice.Retainer_Invoice_number }}</p>
+                                      
                                     </div>
     
                                     <div class="col-md-3 mt-3 vl">
                                         <h6 class="mb-0">Customer Name</h6>
                                     </div>
                                     <div class="col-md-3 mt-3">
-                                        <p class="mb-0 text-right">{{invoice.Customer.title}}. {{invoice.Customer.first_name}} {{invoice.Customer.last_name}}</p>
+                                        <p class="mb-0 text-right">{{Ret_Invoice.Customer.title}}. {{Ret_Invoice.Customer.first_name}} {{Ret_Invoice.Customer.last_name}}</p>
                                     </div>
                                     
                                 </div>
                                 <div class="row mb-4 d-flex justify-content-between align-items-center">
                                     <div class="col-md-3 mt-3">
-                                        <h6 class="mb-0">Invoice Date</h6>
+                                        <h6 class="mb-0">Retainer Invoice Date</h6>
                                     </div>
-                                    <div class="col-md-3 mt-3">
-                                        <p class="mb-0 text-right">{{invoice.invoice_date | date:'d-m-Y'}}</p>
+                                    <div class="col-md-3 mt-3 vr">
+                                        <p class="mb-0 text-right">{{Ret_Invoice.Retainer_Invoice_date| date:'d-m-Y'}}</p>
                                     </div>
-    
-                                    <div class="col-md-3 mt-3 vl">
-                                        <h6 class="mb-0">Shipment Date</h6>
+                                    <div class="col-md-6 mt-3 vl">
+                                        <p class="mb-0 text-right">&nbsp;</p>
                                     </div>
-                                    <div class="col-md-3 mt-3">
-                                        <p class="mb-0 text-right">{{invoice.duedate | date:'d-m-Y'}}</p>
-                                    </div>
+                                   
+
                                 </div>
                                 <div class="row mb-4 d-flex justify-content-start align-items-center">
                                     <div class="col-md-3 mt-3"> 
                                         <h6 class="mb-0">Address</h6>
                                     </div>
                                     <div class="col-md-3 mt-3 vr">
-                                        <p class="mb-0">{{invoice.billing_address}}</p>
+                                        <p class="mb-0">{{Ret_Invoice.Customer_billing_address}}</p>
                                     </div>
-                                    {%if invoice.salesOrder_no %}
-                                    <div class="col-md-3 mt-3 vl"> 
-                                        <h6 class="mb-0">Order No</h6>
-                                    </div>
-                                    <div class="col-md-3 mt-3">
-                                        <p class="mb-0 text-right">{{invoice.salesOrder_no}}</p>
-                                    </div>
-                                    {% else %}
+                                    
                                     <div class="col-md-6 mt-3 vl">
                                         <p class="mb-0 text-right">&nbsp;</p>
                                     </div>
-                                    {% endif %}
+                                   
                                 </div>
                                 
                                 <hr>
@@ -467,7 +459,7 @@
                                     <div class="col-md-12 mt-3">
                                         <h5 style="border-bottom: 1px solid rgba(128, 128, 128, 0.6); width: fit-content;">Items Details</h5>
     
-                                        {% for itm in invItems %}
+                                        {% for itm in riItems %}
                                             <div class="row mb-4 d-flex justify-content-between align-items-center">
                                                 <div class="col-md-3 mt-3">
                                                     <h6 class="mb-0">Name</h6>
@@ -480,7 +472,7 @@
                                                     <h6 class="mb-0">HSN</h6>
                                                 </div>
                                                 <div class="col-md-3 mt-3">
-                                                    <p class="mb-0 text-right">{{itm.hsn}}</p>
+                                                    <p class="mb-0 text-right">{{itm.HSN}}</p>
                                                 </div>
                                                 
                                             </div>
@@ -489,21 +481,21 @@
                                                     <h6 class="mb-0">Price</h6>
                                                 </div>
                                                 <div class="col-md-3 mt-3">
-                                                    <p class="mb-0 text-right">{{itm.price}}</p>
+                                                    <p class="mb-0 text-right">{{itm.Price}}</p>
                                                 </div>
                                                 <div class="col-md-3 mt-3 vl">
                                                     <h6 class="mb-0">Quantity</h6>
                                                 </div>
                                                 <div class="col-md-3 mt-3">
-                                                    <p class="mb-0 text-right">{{ itm.quantity }}</p>
+                                                    <p class="mb-0 text-right">{{ itm.Quantity }}</p>
                                                 </div>
                                             </div>
                                             <div class="row mb-4 d-flex justify-content-start align-items-center">
                                                 <div class="col-md-3 mt-3">
-                                                    <h6 class="mb-0">Tax Amount</h6>
+                                                    <h6 class="mb-0">Description</h6>
                                                 </div>
                                                 <div class="col-md-3 mt-3">
-                                                    <p class="mb-0 text-right">{{itm.tax}} %</p>
+                                                    <p class="mb-0 text-right">{{itm.Discription}}</p>
                                                 </div>
                                                 <div class="col-md-3 mt-3 vl"> 
                                                     <h6 class="mb-0">Discount</h6>
@@ -517,7 +509,7 @@
                                                     <h6 class="mb-0">Total</h6>
                                                 </div>
                                                 <div class="col-md-3 mt-3">
-                                                    <p class="mb-0 text-right">{{itm.total}}</p>
+                                                    <p class="mb-0 text-right">{{itm.Total}}</p>
                                                 </div>
                                                 <div class="col-md-6 mt-3 vl">
                                                     <h6 class="mb-0">&nbsp;</h6>
@@ -538,50 +530,25 @@
                             <hr class="my-4">
                             <div class="d-flex justify-content-between mb-4">
                                 <h6 class="">Bill Status</h6>
-                                {% if invoice.status == 'Draft' %} <span class="text-info h5 font-weight-bold">DRAFT</span> {% else %} <span class="text-success h5 font-weight-bold">SAVED</span> {% endif %}
+                                {% if Ret_Invoice.status == 'Draft' %} <span class="text-info h5 font-weight-bold">DRAFT</span> {% else %} <span class="text-success h5 font-weight-bold">SENT</span> {% endif %}
                             </div>
                             <div class="d-flex justify-content-between mb-4">
                                 <h6 class="">Sub Total</h6>
-                                {{ invoice.subtotal }}
+                                {{ Ret_Invoice.Sub_total }}
                             </div>
-                            <div class="d-flex justify-content-between mb-4">
-                                <h6 class="">Tax Amount</h6>
-                                {{invoice.tax_amount }}
-                            </div>
-                            {%if invoice.igst != 0 %}
-                            <div class="d-flex justify-content-between mb-4">
-                                <h6 class="">IGST</h6>
-                                {{ invoice.igst }}
-                            </div>
-                            {%endif%}
-                            {%if invoice.cgst != 0 %}
-                            <div class="d-flex justify-content-between mb-4">
-                                <h6 class="">CGST</h6>
-                                {{ invoice.cgst }}
-                            </div>
-                            {%endif%}
-                            {%if invoice.sgst != 0 %}
-                            <div class="d-flex justify-content-between mb-4">
-                                <h6 class="">SGST</h6>
-                                {{ invoice.sgst }}
-                            </div>
-                            {%endif%}
-                            {% if invoice.shipping_charge != 0 %}
-                            <div class="d-flex justify-content-between mb-4">
-                                <h6 class="">Shipping Charge</h6>
-                                {{ invoice.shipping_charge}}
-                            </div>
-                            {% endif %}
-                            {% if invoice.adjustment != 0 %}
+                            
+                           
+
+                            {% if Ret_Invoice.Adjustment != 0 %}
                             <div class="d-flex justify-content-between mb-4">
                                 <h6 class="">Adjustment</h6>
-                                {{invoice.adjustment }}
+                                {{Ret_Invoice.Adjustment }}
                             </div>
                             {% endif %}
                             <hr class="my-4">
                             <div class="d-flex justify-content-between mb-4">
                                 <h6 class="">Grand Total</h6>
-                                <span class="font-weight-bold">{{ invoice.grandtotal }}</span>
+                                <span class="font-weight-bold">{{ Ret_Invoice.Grand_total }}</span>
                             </div>
                             
                         </div>
@@ -593,25 +560,23 @@
             <div id="template" style="display: none;" >
                 <div  id="whatToPrint" class="print-only">
             
-                    <!-- template1 -->
+                  
                     <div id="whatToPrint1" class="printTemplates template1">
                         <div class="my-5 page" size="A4" >
                             <div class="p-4" id="printdiv1">
                                 <div id="ember2512" class="tooltip-container ember-view ribbon text-ellipsis">
-                                    <div class="ribbon-inner ribbon-open">{{invoice.status}}<!----></div></div>
+                                    <div class="ribbon-inner ribbon-open">{{Ret_Invoice.status}}</div></div>
                                 <section class="top-content bb d-flex justify-content-between">
                                     <div class="logo">
-                                        <!-- <img src="logo.png" alt="" class="img-fluid"> -->
+                                       
                                     </div>
-                                    <div class="top-left">
+                                    <div class="top-left" >
                                         <div class="graphic-path">
-                                            <p>Invoice</p>
+                                            <p>Retainer Invoice</p>
                                         </div>
                                         <div class="position-relative">
-                                            <p> Invoice No. <span>{{ invoice.invoice_no }}</span></p>
-                                            {%if invoice.salesOrder_no %}
-                                            <p>Order No. <span>{{ invoice.salesOrder_no }}</span></p>
-                                            {% endif %}
+                                            <p> Retainer Invoice No. <span>{{ Ret_Invoice.Retainer_Invoice_number }}</span></p>
+                                           
                                         </div>
                                     </div>
                                 </section>
@@ -631,18 +596,16 @@
                                             </div>
                                             <div class="col-5">
                                                 <p>TO,</p>
-                                                <h5>{{invoice.Customer.title}} {{invoice.Customer.first_name}} {{invoice.Customer.last_name}}</h5>
-                                                <p class="address col-9" style="margin-left: -14px;" > {{ invoice.billing_address}} </p>
+                                                <h5>{{Ret_Invoice.Customer.title}} {{Ret_Invoice.Customer.first_name}} {{Ret_Invoice.Customer.last_name}}</h5>
+                                                <p class="address col-9" style="margin-left: -14px;" > {{Ret_Invoice.Customer_billing_address}} </p>
                                                 
                                             </div>
                                         </div>
                                         <div class="row extra-info pt-3">
                                             <div class="col-6">
-                                                <p>invoices Date: <span>{{invoice.invoice_date | date:'d-m-Y'}}</span></p>
+                                                <p> Reatiner invoice Date: <span>{{Ret_Invoice.Retainer_Invoice_date| date:'d-m-Y'}}</span></p>
                                             </div>
-                                            <div class="col-6">
-                                                <p>Expected Shipment Date : <span>{{invoice.duedate | date:'d-m-Y'}}</span></p>
-                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </section>
@@ -655,22 +618,22 @@
                                                 <td style="font-weight:bold; color:black">HSN</td>
                                                 <td style="font-weight:bold; color:black">Price</td>
                                                 <td style="font-weight:bold; color:black">Quantity</td>
-                                                <td style="font-weight:bold; color:black">Tax</td>
+                                                <td style="font-weight:bold; color:black">Description</td>
                                                 <td style="font-weight:bold; color:black">Discount</td>
                                                 <td style="font-weight:bold; color:black">Total</td>
                                             </tr>
                                         </thead>
                                         <tbody>
             
-                                            {% for j in invItems %}
+                                            {% for j in riItems %}
                                             <tr>
                                                 <td style="color:black; text-align: center;">{{j.Item.name}}</td>
-                                                <td style="color:black">{{j.hsn}}</td>
-                                                <td style="color:black">{{j.price}}</td>
-                                                <td style="color:black">{{j.quantity}}</td>
-                                                <td style="color:black">{{j.tax}} %</td>
+                                                <td style="color:black">{{j.HSN}}</td>
+                                                <td style="color:black">{{j.Price}}</td>
+                                                <td style="color:black">{{j.Quantity}}</td>
+                                                <td style="color:black">{{j.Discription}}</td>
                                                 <td style="color:black">{{j.discount}} </td>
-                                                <td style="color:black">{{j.total}}</td>
+                                                <td style="color:black">{{j.Total}}</td>
                                             </tr>
                                             {% endfor %}
                                         </tbody>
@@ -686,48 +649,15 @@
                                                     <tr >
                                                         <td style="color: #000;">Sub Total</td>
                                                         <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{invoice.subtotal}}</td>
+                                                        <td class="text-right" style="color: #000;">{{Ret_Invoice.Sub_total}}</td>
                                                     </tr>
+                                                  
                                                     
-                                                    {% if invoice.igst != 0 %}
-                                                    <tr >
-                                                        <td style="color: #000;">IGST</td>
-                                                        <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{invoice.igst}}</td>
-                                                    </tr>
-                                                    {% endif %}
-                                                    {% if invoice.cgst != 0 %}
-                                                    <tr>
-                                                        <td style="color: #000;">CGST</td>
-                                                        <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{invoice.cgst}}</td>
-                                                        
-                                                    </tr>
-                                                    {% endif %}
-                                                    {% if invoice.sgst != 0 %}
-                                                    <tr>
-                                                        <td style="color: #000;">SGST</td>
-                                                        <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{invoice.sgst}}</td>
-                                                    </tr>
-                                                    {% endif %}
-                                                    <tr >
-                                                        <td style="color: #000;">Tax Amount</td>
-                                                        <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{invoice.tax_amount}}</td>
-                                                    </tr>
-                                                    {% if invoice.shipping_charge != 0 %}
-                                                    <tr >
-                                                        <td style="color: #000;">Shipping Charge</td>
-                                                        <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{invoice.shipping_charge}}</td>
-                                                    </tr>
-                                                    {% endif %}
-                                                    {% if invoice.adjustment != 0 %}
+                                                    {% if Ret_Invoice.Adjustment != 0 %}
                                                     <tr >
                                                         <td style="color: #000;">Adjustment</td>
                                                         <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{invoice.adjustment}}</td>
+                                                        <td class="text-right" style="color: #000;">{{Ret_Invoice.Adjustment}}</td>
                                                     </tr>
                                                     {% endif %}
                                                 </tbody>
@@ -739,7 +669,7 @@
                                                     <tr >
                                                         <th style="color: #000;">Grand Total</th>
                                                         <th style="color: #000;">:</th>
-                                                        <th class="text-right" style="color: #000;">{{invoice.grandtotal}}</th>
+                                                        <th class="text-right" style="color: #000;">{{Ret_Invoice.Grand_total}}</th>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -759,17 +689,15 @@
                             <div id="printdiv2">
                                 <div class="row px-5 py-4" style="background-color:#268ddd;" >
                                     <div id="ember2512" class="col-md-4 d-flex justify-content-start tooltip-container ember-view ribbon text-ellipsis">
-                                      <div class="text-white d-flex align-items-center px-5" style="border-radius: 1vh; background-color:#999999">{{invoice.status}}<!----></div>
+                                      <div class="text-white d-flex align-items-center px-5" style="border-radius: 1vh; background-color:#999999">{{Ret_Invoice.status}}</div>
                                   </div>
                                   <div class="col-md-4 d-flex justify-content-center">
-                                      <center class="h3 text-white"><b>Invoice</b></center>
+                                      <center class="h3 text-white"><b>Retainer Invoice</b></center>
                                   </div>  
                                   <div class="col-md-4 d-flex justify-content-end">
                                       <div class="text-white">
-                                          <p class="mb-0 mt-2">Invoice No: <b>{{invoice.invoice_no }}</b></p>
-                                          {%if invoice.salesOrder_no %}
-                                          <p class="mb-0 mt-2">Order No: <b>{{invoice.salesOrder_no }}</b></p>
-                                          {% endif %}
+                                          <p class="mb-0 mt-2">Retainer Invoice No: <b>{{Ret_Invoice.Retainer_Invoice_number}}</b></p>
+                                         
                                       </div>
                                   </div>
                               </div>
@@ -793,8 +721,8 @@
                                               <div class="col-4"></div>
                                               <div class="col-4 pr-0">
                                                   <label class="text-white w-100 p-1" style="border-top-right-radius: 4vh; border-bottom-right-radius: 4vh; background-color: #999999;" ><b>SHIPPING ADDRESS</b></label>
-                                                  <h5 class="text-secondary" style="font-weight: bold;">{{invoice.Customer.title}} {{invoice.Customer.first_name}} {{invoice.Customer.last_name}}</h5>
-                                                  <p class="address" style="font-weight: bold;color: #000;">{{ invoice.billing_address | linebreaksbr}} </p>
+                                                  <h5 class="text-secondary" style="font-weight: bold;">{{Ret_Invoice.Customer.title}} {{Ret_Invoice.Customer.first_name}} {{Ret_Invoice.Customer.last_name}}</h5>
+                                                  <p class="address" style="font-weight: bold;color: #000;">{{ Ret_Invoice.Customer_billing_address | linebreaksbr}} </p>
                                               </div>
                                           </div>
                                           
@@ -809,21 +737,21 @@
                                                   <th class="text-center bg-dark" style="color:black">HSN</th>
                                                   <th class="text-center bg-dark" style="color:black">Quantity</th>
                                                   <th class="text-center bg-dark" style="color:black">Rate</th>
-                                                  <th class="text-center bg-dark" style="color:black">Tax</th>
+                                                  <th class="text-center bg-dark" style="color:black">Description</th>
                                                   <th class="text-center bg-dark" style="color:black">Discount</th>
                                                   <th class="text-center bg-dark" style="color:black">Total</th>
                                               </tr>
                                           </thead>
                                           <tbody  style="background-color: #999999;">
-                                              {% for itm in invItems %}
+                                              {% for itm in riItems %}
                                                   <tr>
                                                       <td class="text-center" style="color:black">{{ itm.Item.name}}</td>
-                                                      <td class="text-center" style="color:black">{{ itm.hsn }}</td>
-                                                      <td class="text-center" style="color:black">{{ itm.quantity }}</td>
-                                                      <td class="text-center" style="color:black">{{ itm.price  }}</td>
-                                                      <td class="text-center" style="color:black">{{ itm.tax  }}%</td>
-                                                      <td class="text-center" style="color:black">{{ itm.discount  }}</td>
-                                                      <td class="text-center" style="color:black">{{ itm.total }}</td>
+                                                      <td class="text-center" style="color:black">{{ itm.HSN }}</td>
+                                                      <td class="text-center" style="color:black">{{ itm.Quantity }}</td>
+                                                      <td class="text-center" style="color:black">{{ itm.Price }}</td>
+                                                      <td class="text-center" style="color:black">{{ itm.Discription }}</td>
+                                                      <td class="text-center" style="color:black">{{ itm.discount }}</td>
+                                                      <td class="text-center" style="color:black">{{ itm.Total }}</td>
                                                   </tr>
                                               {% endfor %} 
                                           </tbody>
@@ -835,11 +763,11 @@
                                           <div class="col-4">
                                               <table class="table table-borderless">
                                                   <tbody>
-                                                      {% if invoice.note %}
+                                                      {% if Ret_Invoice.Description %}
                                                       <tr >
                                                           <td style="color: #000;text-align: left;">Note</td>
                                                           <td style="color: #000;text-align: left;">:</td>
-                                                          <th style="color: #000;text-align: center;">{{invoice.note}}</th>
+                                                          <th style="color: #000;text-align: center;">{{Ret_Invoice.Description}}</th>
                                                       </tr>
                                                       {% endif %}
           
@@ -853,48 +781,16 @@
                                                       <tr >
                                                           <td style="color: #000;">Sub Total</td>
                                                           <td style="color: #000;">:</td>
-                                                          <td class="text-right" style="color: #000;">{{invoice.subtotal}}</td>
+                                                          <td class="text-right" style="color: #000;">{{Ret_Invoice.Sub_total}}</td>
                                                       </tr>
                                                       
-                                                      {% if invoice.igst != 0 %}
-                                                      <tr >
-                                                          <td style="color: #000;">IGST</td>
-                                                          <td style="color: #000;">:</td>
-                                                          <td class="text-right" style="color: #000;">{{invoice.igst}}</td>
-                                                      </tr>
-                                                      {% endif %}
-                                                      {% if invoice.cgst != 0 %}
-                                                      <tr>
-                                                          <td style="color: #000;">CGST</td>
-                                                          <td style="color: #000;">:</td>
-                                                          <td class="text-right" style="color: #000;">{{invoice.cgst}}</td>
-                                                          
-                                                      </tr>
-                                                      {% endif %}
-                                                      {% if invoice.sgst != 0 %}
-                                                      <tr>
-                                                          <td style="color: #000;">SGST</td>
-                                                          <td style="color: #000;">:</td>
-                                                          <td class="text-right" style="color: #000;">{{invoice.sgst}}</td>
-                                                      </tr>
-                                                      {% endif %}
-                                                      <tr >
-                                                        <td style="color: #000;">Tax Amount</td>
-                                                        <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{invoice.tax_amount}}</td>
-                                                    </tr>
-                                                    {% if invoice.shipping_charge != 0 %}
-                                                    <tr >
-                                                        <td style="color: #000;">Shipping Charge</td>
-                                                        <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{invoice.shipping_charge}}</td>
-                                                    </tr>
-                                                    {% endif %}
-                                                    {% if invoice.adjustment != 0 %}
+                                                     
+                                                      
+                                                    {% if Ret_Invoice.Adjustment != 0 %}
                                                     <tr >
                                                         <td style="color: #000;">Adjustment</td>
                                                         <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{invoice.adjustment}}</td>
+                                                        <td class="text-right" style="color: #000;">{{Ret_Invoice.Adjustment}}</td>
                                                     </tr>
                                                     {% endif %}
                                                   </tbody>
@@ -906,7 +802,7 @@
                                                       <tr >
                                                           <th style="color: #000;">Grand Total</th>
                                                           <th style="color: #000;">:</th>
-                                                          <th class="text-right" style="color: #000;">{{invoice.grandtotal}}</th>
+                                                          <th class="text-right" style="color: #000;">{{Ret_Invoice.Grand_total}}</th>
                                                       </tr>
                                                   </tbody>
                                               </table>
@@ -940,8 +836,8 @@
                                         <div class="col-5">
                                             <br><br><br>
                                             <p style="color:black;"> <span style=" font-weight: bold;">To: </span><br>
-                                            {{invoice.Customer.title}} {{invoice.Customer.first_name}} {{invoice.Customer.last_name}}<br>
-                                            {{invoice.billing_address|linebreaksbr }}
+                                            {{Ret_Invoice.Customer.title}} {{Ret_Invoice.Customer.first_name}} {{Ret_Invoice.Customer.last_name}}<br>
+                                            {{Ret_Invoice.billing_address|linebreaksbr }}
                                             </p>
                                         </div>
                                         <div class="col-md-1"></div>
@@ -950,30 +846,19 @@
                                             <table class="table table-borderless">
                                                 <tbody>
                                                     <tr >
-                                                        <td style="color: #000; font-weight: bold;">Invoices No</td>
+                                                        <td style="color: #000; font-weight: bold;">Retainer Invoices No</td>
                                                         <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{ invoice.invoice_no }}</td>
+                                                        <td class="text-right" style="color: #000;">{{ Ret_Invoice.Retainer_Invoice_number}}</td>
                                                     </tr>
-                                                    {%if invoice.salesOrder_no %}
-                                                    <tr >
-                                                        <td style="color: #000; font-weight: bold;">Order No</td>
-                                                        <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{ invoice.salesOrder_no }}</td>
-                                                    </tr>
-                                                    {% endif %}
+                                                   
                                                     
                                                     <tr >
-                                                        <td style="color: #000; font-weight: bold;">Invoice Date</td>
+                                                        <td style="color: #000; font-weight: bold;">Retainer Invoice Date</td>
                                                         <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{invoice.invoice_date | date:'d-m-Y'}}<td>
+                                                        <td class="text-right" style="color: #000;">{{Ret_Invoice.Retainer_Invoice_date | date:'d-m-Y'}}<td>
                                                     </tr>
      
-                                                    <tr>
-                                                        <td style="color: #000; font-weight: bold;">Shipment Date</td>
-                                                        <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{invoice.duedate | date:'d-m-Y'}}</td>
-                                                        
-                                                    </tr>
+                                                   
                                                 </tbody>
             
                                             </table>
@@ -988,22 +873,23 @@
                                                     <th class="text-center bg-dark"  style="color:black">HSN</th>
                                                     <th class="text-center bg-dark"  style="color:black">Quantity</th>
                                                     <th class="text-center bg-dark"  style="color:black">Rate</th>
-                                                    <th class="text-center bg-dark"  style="color:black">Tax</th>
+                                                    <th class="text-center bg-dark"  style="color:black">Description</th>
                                                     <th class="text-center bg-dark"  style="color:black">Discount</th>
                                                     <th class="text-center bg-dark"  style="color:black">Total</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {% for itm in invItems %}
-                                                    <tr>
-                                                        <td class="text-center" style="color: black;">{{ itm.Item.name}}</td>
-                                                        <td class="text-center" style="color: black;">{{ itm.hsn }}</td>
-                                                        <td class="text-center" style="color: black;">{{ itm.quantity }}</td>
-                                                        <td class="text-center" style="color: black;">{{ itm.price }}</td>
-                                                        <td class="text-center" style="color: black;">{{ itm.tax }}%</td>
-                                                        <td class="text-center" style="color: black;">{{ itm.discount }}</td>
-                                                        <td class="text-center" style="color: black;">{{ itm.total }}</td>
-                                                    </tr>
+                                                
+                                                {% for itm in riItems %}
+                                                <tr>
+                                                    <td class="text-center" style="color:black">{{ itm.Item.name}}</td>
+                                                    <td class="text-center" style="color:black">{{ itm.HSN }}</td>
+                                                    <td class="text-center" style="color:black">{{ itm.Quantity }}</td>
+                                                    <td class="text-center" style="color:black">{{ itm.Price }}</td>
+                                                    <td class="text-center" style="color:black">{{ itm.Discription }}</td>
+                                                    <td class="text-center" style="color:black">{{ itm.discount }}</td>
+                                                    <td class="text-center" style="color:black">{{ itm.Total }}</td>
+                                                </tr>
                                                 {% endfor %} 
                                             </tbody>
                                         </table>
@@ -1019,48 +905,16 @@
                                                     <tr >
                                                         <td style="color: #000;">Sub Total</td>
                                                         <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{invoice.subtotal}}</td>
+                                                        <td class="text-right" style="color: #000;">{{Ret_Invoice.Sub_total}}</td>
                                                     </tr>
                                                     
-                                                    {% if invoice.igst != 0 %}
-                                                    <tr >
-                                                        <td style="color: #000;">IGST</td>
-                                                        <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{invoice.igst}}</td>
-                                                    </tr>
-                                                    {% endif %}
-                                                    {% if invoice.cgst != 0 %}
-                                                    <tr>
-                                                        <td style="color: #000;">CGST</td>
-                                                        <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{invoice.cgst}}</td>
-                                                        
-                                                    </tr>
-                                                    {% endif %}
-                                                    {% if invoice.sgst != 0 %}
-                                                    <tr>
-                                                        <td style="color: #000;">SGST</td>
-                                                        <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{invoice.sgst}}</td>
-                                                    </tr>
-                                                    {% endif %}
-                                                    <tr >
-                                                        <td style="color: #000;">Tax Amount</td>
-                                                        <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{invoice.tax_amount}}</td>
-                                                    </tr>
-                                                    {% if invoice.shipping_charge != 0 %}
-                                                    <tr >
-                                                        <td style="color: #000;">Shipping Charge</td>
-                                                        <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{invoice.shipping_charge}}</td>
-                                                    </tr>
-                                                    {% endif %}
-                                                    {% if invoice.adjustment != 0 %}
+                                                   
+                                                
+                                                    {% if Ret_Invoice.Adjustment != 0 %}
                                                     <tr >
                                                         <td style="color: #000;">Adjustment</td>
                                                         <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{invoice.adjustment}}</td>
+                                                        <td class="text-right" style="color: #000;">{{Ret_Invoice.Adjustment}}</td>
                                                     </tr>
                                                     {% endif %}
                                                 </tbody>
@@ -1072,7 +926,7 @@
                                                     <tr >
                                                         <th style="color: #000;">Grand Total</th>
                                                         <th style="color: #000;">:</th>
-                                                        <th class="text-right" style="color: #000;">{{invoice.grandtotal}}</th>
+                                                        <th class="text-right" style="color: #000;">{{Ret_Invoice.Grand_total}}</th>
                                                     </tr>
                                                     <tr >
                                                 </tbody>
@@ -1106,27 +960,19 @@
 
                         <div class="ml-4 mt-2" style="color: black;">
                             <div class="row">
-                                <div class="col-md-6 text-left">Invoice No:</div>
-                                <div class="col-md-5 text-right">{{invoice.invoice_no}}</div>
+                                <div class="col-md-6 text-left">Retainer Invoice No:</div>
+                                <div class="col-md-5 text-right">{{Ret_Invoice.Retainer_Invoice_number}}</div>
                             </div>
-                            {% if invoice.salesOrder_no  %}
-                            <div class="row">
-                                <div class="col-md-6 text-left">Order No:</div>
-                                <div class="col-md-5 text-right">{{invoice.salesOrder_no}}</div>
-                            </div>
-                            {% endif %}
+                           
                             <div class="row">
                                 <div class="col-md-6 text-left">Customer Name:</div>
-                                <div class="col-md-5 text-right">{{invoice.Customer.first_name}} {{invoice.Customer.last_name}}</div>
+                                <div class="col-md-5 text-right">{{Ret_Invoice.Customer.first_name}} {{Ret_Invoice.Customer.last_name}}</div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 text-left">Invoice Date :</div>
-                                <div class="col-md-5 text-right">{{invoice.invoice_date | date:'d-m-Y'}}</div>
+                                <div class="col-md-6 text-left">Retainer Invoice Date :</div>
+                                <div class="col-md-5 text-right">{{Ret_Invoice.Retainer_Invoice_date| date:'d-m-Y'}}</div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6 text-left">Shipment Date:</div>
-                                <div class="col-md-5 text-right">{{invoice.duedate | date:'d-m-Y'}}</div>
-                            </div>
+                            
                         </div>
 
                         <div class="divider"></div>
@@ -1149,7 +995,7 @@
                                 <hr style="border-bottom: 1px solid black; margin-top:1vh; width:65%;  margin-left: 10px;">
                             </div>
                             <div class="equal-length-item"  style=" text-align: center; ">
-                                Tax
+                                Description
                                 <hr style="border-bottom: 1px solid black; margin-top:1vh; width:60%;  margin-left: 10px;">
                             </div>
                             <div class="equal-length-item" style=" text-align: center; ">
@@ -1157,25 +1003,23 @@
                                 <hr style="border-bottom: 1px solid black; margin-top:1vh; width:65%;  margin-left: 10px;">
                             </div>
                         </div>
-                        {% for i in invItems %}
+                        {% for i in riItems %}
                         <div class="equal-length-container" style="color: black; font-size: small; word-wrap: break-word; margin-bottom: 1vh;">
                             <div class="equal-length-item"  style="text-align: center; margin-left: 2px;">
                                 {{i.Item.name}}
                             </div>
                             <div class="equal-length-item" style="text-align: right;">
-                                {{i.hsn}}
+                                {{i.HSN}}
                             </div>
                             <div class="equal-length-item" style="text-align: center; ">
-                                {{i.quantity}}
+                                {{i.Quantity}}
                             </div>
                             <div class="equal-length-item" style="text-align: center; ">
-                                {{i.price}}
+                                {{i.Price}}
                             </div>
-                            <div class="equal-length-item" id="tax{{ forloop.counter }}">
-                                {{ i.tax  }}%
-                            </div>
+                            
                             <div class="equal-length-item" style="text-align: center; ">
-                                {{i.total}}
+                                {{i.Total}}
                             </div>
                         </div>
                         {% endfor %}
@@ -1183,43 +1027,26 @@
                         <div class="subtot mt-5">
                             <div class="subtot-item d-flex justify-content-between">
                                 <span>Subtotal</span>
-                                <span><span>&#8377; </span>{{invoice.subtotal}}</span>
+                                <span><span>&#8377; </span>{{Ret_Invoice.Sub_total}}</span>
                             </div>
-                            <div class="subtot-item d-flex justify-content-between">
-                                <span>Tax Amount</span>
-                                <span><span>&#8377; </span>{{invoice.tax_amount}}</span>
-                            </div>
-                            {% if invoice.igst == 0 %}
-                            <div class="subtot-item d-flex justify-content-between">
-                                <span>CGST</span>
-                                <span><span>&#8377; </span>{{invoice.cgst}}</span>
-                            </div>
-                            <div class="subtot-item d-flex justify-content-between">
-                                <span>SGST</span>
-                                <span><span>&#8377; </span>{{invoice.sgst}}</span>
-                            </div>
-                            {% else %}
-                            <div class="subtot-item d-flex justify-content-between">
-                                <span>IGST</span>
-                                <span><span>&#8377; </span>{{invoice.igst}}</span>
-                            </div>
-                            {% endif %}
-                            {% if invoice.adjustment != 0 %}
+                           
+                           
+                            {% if Ret_Invoice.Adjustment != 0 %}
                             <div class="subtot-item d-flex justify-content-between">
                                 <span>Adjustment</span>
-                                <span><span>&#8377; </span>{{invoice.adjustment}}</span>
+                                <span><span>&#8377; </span>{{Ret_Invoice.Adjustment}}</span>
                             </div>
                             {% endif %}
                         </div>
                         <div class="divider"></div>
                         <div class="grandtot fw-bold d-flex justify-content-between">
                             <span><strong>TOTAL</strong></span>
-                            <span><strong><span>&#8377; </span>{{invoice.grandtotal}}</strong></span>
+                            <span><strong><span>&#8377; </span>{{Ret_Invoice.Grand_total}}</strong></span>
                         </div>
                         <div class="divider"></div>
                         <div class="paid-by mb-4 d-flex justify-content-between">
                             <span>Paid By:</span>
-                            <span>{{invoice.payment_method}}</span>
+                            <span>{{Ret_Invoice.Payment_method}}</span>
                         </div>
                         <div class="createdby d-flex justify-content-between">
                             <p class="">Created By:</p>
@@ -1232,12 +1059,7 @@
                         <div class="trns-id d-flex justify-content-between">
                             <span>Transaction ID:</span>
                             <span>XXXXXXXXX</span>
-                            <!-- <div>
-                                <p class="float-start">
-                                    <span>Vendor ID:</span>
-                                    <span>XXXXXXXXXX</span>
-                                </p>
-                            </div> -->
+                            
                         </div>
                         <div class="slip-footer mt-4 text-center">
                             <p>Thank you for supporting Local business!</p>

@@ -16867,15 +16867,15 @@ def Fin_RET_INV_Add(request):
         latest_ret_inv = Fin_Retainer_Invoice.objects.filter(Company=cmp).last()
 
       
-        if latest_ret_inv:
+        # if latest_ret_inv:
          
-            prefix = 'RETINV'  
-            numeric_part = int(latest_ret_inv.Retainer_Invoice_number[len(prefix):]) 
-            next_numeric_part = numeric_part + 1  
-            ret_inv_no = f"{prefix}{next_numeric_part}"  
-        else:
+        #     prefix = 'RETINV'  
+        #     numeric_part = int(latest_ret_inv.Retainer_Invoice_number[len(prefix):]) 
+        #     next_numeric_part = numeric_part + 1  
+        #     ret_inv_no = f"{prefix}{next_numeric_part}"  
+        # else:
             
-            ret_inv_no = ''
+        #     ret_inv_no = ''
 
         item = Fin_Items.objects.filter(Company = cmp, status = 'Active')
         customer = Fin_Customers.objects.filter(Company = cmp, status = 'Active')
@@ -16952,6 +16952,7 @@ def Fin_Create_RET_INV(request):
             ret_inv_no = request.POST.get('ret_inv_no')
             reference_no=request.POST.get('reference_no')
             ret_inv_date = request.POST.get('ret_inv_date')
+            note = request.POST.get('note')
             payment_method = None if request.POST.get('payment_method') == "" else request.POST.get('payment_method')
             upi = None if request.POST.get('upi') == "" else request.POST.get('upi')
             acc_no = None if request.POST.get('a/c_no')   == "" else request.POST.get('a/c_no')
@@ -17008,16 +17009,16 @@ def Fin_Create_RET_INV(request):
             hsn  = request.POST.getlist("hsn[]")
             qty = request.POST.getlist("qty[]")
             price = request.POST.getlist("price[]")
-            description = request.POST.getlist(" description[]")
+            description = request.POST.getlist("description[]")
             discount = request.POST.getlist("discount[]")
             total = request.POST.getlist("total[]")
 
-            if len(itemId)==len(itemName)==len(hsn)==len(qty)==len(price)==len(description)==len(discount)==len(total) and itemId and itemName and hsn and qty and price and tax and discount and total:
+            if len(itemId)==len(itemName)==len(hsn)==len(qty)==len(price)==len(description)==len(discount)==len(total) and itemId and itemName and hsn and qty and price and description and discount and total:
                 mapped = zip(itemId,itemName,hsn,qty,price,description,discount,total)
                 mapped = list(mapped)
                 for ele in mapped:
                     item = Fin_Items.objects.get(id = int(ele[0]))
-                    Fin_Retainer_Invoice_Items.objects.create(Ret_Inv=ret_inv, Item = item, HSN = ele[2], Quantity= int(ele[3]), Price= float(ele[4]),  Discription = ele[5], discount = float(ele[6]), total = float(ele[7]))
+                    Fin_Retainer_Invoice_Items.objects.create(Ret_Inv=ret_inv, Item = item, HSN = ele[2], Quantity= int(ele[3]), Price= float(ele[4]), Discription = ele[5], discount = float(ele[6]), Total = float(ele[7]))
                     item.current_stock -= int(ele[3])
                     item.save()
             
