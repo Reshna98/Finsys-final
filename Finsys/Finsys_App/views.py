@@ -16880,9 +16880,9 @@ def Fin_RET_INV_Add(request):
         if Fin_Retainer_Invoice_Reference.objects.filter(Company = cmp).exists():
             deleted = Fin_Retainer_Invoice_Reference.objects.get(Company = cmp)
             
-            # if deleted:
-            #     while int(deleted.Reference_no)>= new_number:
-            #         new_number+=1
+            if deleted:
+                while int(deleted.Reference_no)>= new_number:
+                    new_number+=1
 
        
         nxtRI = ""
