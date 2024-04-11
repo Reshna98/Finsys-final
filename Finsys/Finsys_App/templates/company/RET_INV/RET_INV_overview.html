@@ -293,11 +293,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 
 <div class="page-content " id="page-content">
-    <span class="d-flex justify-content-end p-2" style="cursor: pointer;" onclick="window.location.href=`{% url 'Fin_invoice' %}`"><i class="fa fa-times-circle text-white" style="font-size: 1.2rem;"></i></span>
+    <span class="d-flex justify-content-end p-2" style="cursor: pointer;" onclick="window.location.href=`{% url 'Fin_RET_INV_Listout' %}`"><i class="fa fa-times-circle text-white" style="font-size: 1.2rem;"></i></span>
     <div class="card radius-15">
         <div class="card-body" style="width:100%;">
             <div class="card-title">
-                <div class="container-fluid">
+                <div class="container-fluid mb-3">
                     <div class="row">
                         <div class="col-md-6">
                             <a style="padding: 10px; cursor: pointer; border-radius: 1vh; background-color: rgba(22,37,50,255);" onclick="overview()" id="overviewBtn" >Overview</a>
@@ -306,16 +306,16 @@
                         </div> 
 
                         <div class="col-md-6 d-flex justify-content-end">
-                            {% if invoice.status == 'Draft' %}
+                            {% if Ret_Invoice.status == 'Draft' %}
                             <div class="dropdown p-0 nav-item"  id="convertBtn" style="display: block;">
                                 <li  class="dropdown-toggle btn btn-outline-secondary text-grey fa fa-exchange" data-toggle="dropdown">&nbsp;Convert</li>
                                 <ul class="dropdown-menu" style="background-color: black;" id="">
-                                    <a class="dropdown-item" href="">Saved</a>
+                                    <a class="dropdown-item" href="{%url 'Fin_convertRI' Ret_Invoice.id %}">Sent</a>
                                 </ul>
                             </div>
                             {% endif %}
                             <a class="ml-2 btn btn-outline-secondary text-grey fa fa-table" role="button" id="exportBtn" style="display: none;" onclick="ExportToExcel('xlsx')">&nbsp;Export</a>
-                            <a href="" class="ml-2 btn btn-outline-secondary text-grey fa fa-file" role="button" id="pdfBtn" style="display: none;"> &nbsp;PDF</a> 
+                            <a href="{% url 'Fin_RIPdf' Ret_Invoice.id %}" class="ml-2 btn btn-outline-secondary text-grey fa fa-file" role="button" id="pdfBtn" style="display: none;"> &nbsp;PDF</a> 
                             <a class="ml-2 btn btn-outline-secondary text-grey fa fa-print" role="button" id="printBtn" style="display: none; " onclick="printSection('whatToPrint')">&nbsp;Print</a>
                             <div class="dropdown p-0 nav-item"  id="shareBtn" style="display: none;">
                                 <li  class="ml-2 dropdown-toggle btn btn-outline-secondary text-grey fa fa-share-alt" data-toggle="dropdown">&nbsp;Share</li>
@@ -324,10 +324,10 @@
                                     <li style="text-align: center;color: #e5e9ec; cursor: pointer;" data-toggle="modal" data-target="#shareToEmail">Email</li>
                                 </ul>
                             </div>
-                            <a href="" class="ml-2 fa fa-pencil btn btn-outline-secondary text-grey" id="editBtn" role="button">&nbsp;Edit</a>
-                            <a href="" class="ml-2 btn btn-outline-secondary text-grey fa fa-trash" id="deleteBtn" role="button" onclick="return confirm('Are you sure you want to delete Invoice - {{invoice.invoice_no}}.?')">&nbsp;Delete</a>
+                            <a href="{% url 'Fin_RET_INV_update' Ret_Invoice.id %}" class="ml-2 fa fa-pencil btn btn-outline-secondary text-grey" id="editBtn" role="button">&nbsp;Edit</a>
+                            <a href="{% url 'Fin_deleteRI' Ret_Invoice.id%}" class="ml-2 btn btn-outline-secondary text-grey fa fa-trash" id="deleteBtn" role="button" onclick="return confirm('Are you sure you want to delete Retainer Invoice - {{Ret_Invoice.Retainer_Invoice_number}}.?')">&nbsp;Delete</a>
                             <a href="#"  class="ml-2 btn btn-outline-secondary text-grey fa fa-comments" id="commentsBtn" role="button" data-toggle="modal" data-target="#commentModal">&nbsp;Comment</a>
-                            <a href=""  class="ml-2 btn btn-outline-secondary text-grey fa fa-history" id="historyBtn" role="button" >&nbsp;History</a>
+                            <a href="{% url 'Fin_RIHistory' Ret_Invoice.id %}"  class="ml-2 btn btn-outline-secondary text-grey fa fa-history" id="historyBtn" role="button" >&nbsp;History</a>
                         </div>
                     </div> 
                 </div>
@@ -419,22 +419,30 @@
                                     </div>
     
                                     <div class="col-md-3 mt-3 vl">
-                                        <h6 class="mb-0">Customer Name</h6>
+                                        <h6 class="mb-0">Payment_Method</h6>
                                     </div>
                                     <div class="col-md-3 mt-3">
-                                        <p class="mb-0 text-right">{{Ret_Invoice.Customer.title}}. {{Ret_Invoice.Customer.first_name}} {{Ret_Invoice.Customer.last_name}}</p>
+                                        {% if is_bank_payment %}
+                                            <p class="mb-0 text-right">{{ bank_name }}</p>
+                                        {% else %}
+                                            <p class="mb-0 text-right">{{ Ret_Invoice.Payment_Method }}</p>
+                                        {% endif %}
                                     </div>
+                                    
                                     
                                 </div>
                                 <div class="row mb-4 d-flex justify-content-between align-items-center">
                                     <div class="col-md-3 mt-3">
                                         <h6 class="mb-0">Retainer Invoice Date</h6>
                                     </div>
-                                    <div class="col-md-3 mt-3 vr">
+                                    <div class="col-md-3 mt-3">
                                         <p class="mb-0 text-right">{{Ret_Invoice.Retainer_Invoice_date| date:'d-m-Y'}}</p>
                                     </div>
-                                    <div class="col-md-6 mt-3 vl">
-                                        <p class="mb-0 text-right">&nbsp;</p>
+                                    <div class="col-md-3 mt-3 vl">
+                                        <h6 class="mb-0">Customer Name</h6>
+                                    </div>
+                                    <div class="col-md-3 mt-3">
+                                        <p class="mb-0 text-right">{{Ret_Invoice.Customer.title}}. {{Ret_Invoice.Customer.first_name}} {{Ret_Invoice.Customer.last_name}}</p>
                                     </div>
                                    
 
@@ -1086,7 +1094,7 @@
             </div>
             <div class="modal-body">
                 <div class="card p-3">
-                    <form action="" method="post" class="needs-validation" id="share_to_email_form">
+                    <form action="{%url 'Fin_shareRIEmail' Ret_Invoice.id %}" method="post" class="needs-validation" id="share_to_email_form">
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="emailIds">Email IDs</label>
@@ -1117,7 +1125,7 @@
                 </button>
             </div>
 
-            <form action="" method="post">
+            <form action="{% url 'Fin_addRETINVComment' Ret_Invoice.id %}" method="post">
                 {% csrf_token %}
                 <div class="modal-body">
                     <textarea type="text" class="form-control" name="comment" placeholder="Add Comments.." required></textarea>
@@ -1138,7 +1146,7 @@
                                 <tr class="">
                                     <td class="text-center">{{forloop.counter }}</td>
                                     <td class="text-center">{{c.comments}}</td>
-                                    <td class="text-center"><a class="text-danger" href="{% url 'Fin_deleteInvoiceComment' c.id %}" onclick="return confirm('Are you sure you want to delete.?')"><i class="fa fa-trash" style="font-size: 1.1rem;"></i></a></td>
+                                    <td class="text-center"><a class="text-danger" href="{% url 'Fin_deleteRETINVComment' c.id %}" onclick="return confirm('Are you sure you want to delete.?')"><i class="fa fa-trash" style="font-size: 1.1rem;"></i></a></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -1220,21 +1228,6 @@
         $('#commentsBtn').show();
     }
 
-    // function printSection(sectionId) {
-    //     document.body.style.backgroundColor = 'white';
-    //     $('#template, #template *').css('color', 'black');
-
-    //     var printContents = document.getElementById(sectionId).innerHTML;
-    //     var $printerDiv = $('<div class="printContainer"></div>');
-    //     $printerDiv.html(printContents);
-    //     $('body').append($printerDiv).addClass("printingContent");
-
-    //     window.print();
-    //     $printerDiv.remove();
-    //     $('body').removeClass("printingContent");
-    //     $('#template, #template *').css('color', 'white');
-    
-    // }
 
     $(document).ready(function(){
         $('#share_with_email').on('click',function(){
