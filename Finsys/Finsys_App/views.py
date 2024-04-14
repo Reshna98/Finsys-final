@@ -16852,27 +16852,152 @@ def Fin_RET_INV_Listout(request):
     else:
        return redirect('/')
 
+
+# def Fin_RET_INV_Add(request):
+#     if 's_id' in request.session:
+#         s_id = request.session['s_id']
+#         data = Fin_Login_Details.objects.get(id = s_id)
+#         if data.User_Type == "Company":
+#             com = Fin_Company_Details.objects.get(Login_Id = s_id)
+#             allmodules = Fin_Modules_List.objects.get(Login_Id = s_id,status = 'New')
+#             cmp = com
+#         else:
+#             com = Fin_Staff_Details.objects.get(Login_Id = s_id)
+#             allmodules = Fin_Modules_List.objects.get(company_id = com.company_id,status = 'New')
+#             cmp = com.company_id
+       
+
+#         item = Fin_Items.objects.filter(Company = cmp, status = 'Active')
+#         customer = Fin_Customers.objects.filter(Company = cmp, status = 'Active')
+#         payment_terms = Fin_Company_Payment_Terms.objects.filter(Company = cmp)
+#         bank = Fin_Banking.objects.filter(company = cmp)
+#         list = Fin_Price_List.objects.filter(Company = cmp, status = 'Active')
+#         units = Fin_Units.objects.filter(Company = cmp)
+#         account = Fin_Chart_Of_Account.objects.filter(Q(account_type='Expense') | Q(account_type='Other Expense') | Q(account_type='Cost Of Goods Sold'), Company=cmp).order_by('account_name')
+#         latest_ri = Fin_Retainer_Invoice.objects.filter(Company = cmp).order_by('-id').first()
+
+#         new_number = int(latest_ri.Reference_number) + 1 if latest_ri else 1
+
+#         if Fin_Retainer_Invoice_Reference.objects.filter(Company = cmp).exists():
+#             deleted = Fin_Retainer_Invoice_Reference.objects.get(Company = cmp)
+            
+#             if deleted:
+#                 while int(deleted.Reference_no)>= new_number:
+#                     new_number+=1
+
+       
+#         nxtRI = ""
+#         lastRI = Fin_Retainer_Invoice.objects.filter(Company = cmp).last()
+#         if lastRI:
+#             ri_no = str(lastRI.Retainer_Invoice_number)
+#             numbers = []
+#             stri = []
+#             for word in ri_no:
+#                 if word.isdigit():
+#                     numbers.append(word)
+#                 else:
+#                     stri.append(word)
+            
+#             num=''
+#             for i in numbers:
+#                 num +=i
+            
+#             st = ''
+#             for j in stri:
+#                 st = st+j
+
+#             ri_num = int(num)+1
+
+#             if num[0] == '0':
+#                 if ri_num <10:
+#                     nxtri = st+'0'+ str(ri_num)
+#                 else:
+#                     nxtri = st+ str(ri_num)
+#             else:
+#                 nxtri = st+ str(ri_num)
+#         else:
+#             nxtri = 'RETINV01'
+#         context = {
+#             'allmodules':allmodules, 'com':com, 'cmp':cmp, 'data':data, 'customer':customer, 'item':item, 
+#            'banks':bank,'pterm':payment_terms,'unit':units,'account':account,'plist':list,'ref_no':new_number,'riNo':nxtri
+#         }
+#         return render(request,'company/RET_INV/RET_INV_add.html',context)
+#     else:
+#        return redirect('/')
+# def Fin_RET_INV_Add(request):
+#     if 's_id' in request.session:
+#         s_id = request.session['s_id']
+#         data = Fin_Login_Details.objects.get(id=s_id)
+#         if data.User_Type == "Company":
+#             com = Fin_Company_Details.objects.get(Login_Id=s_id)
+#             allmodules = Fin_Modules_List.objects.get(Login_Id=s_id, status='New')
+#             cmp = com
+#         else:
+#             com = Fin_Staff_Details.objects.get(Login_Id=s_id)
+#             allmodules = Fin_Modules_List.objects.get(company_id=com.company_id, status='New')
+#             cmp = com.company_id
+
+#         item = Fin_Items.objects.filter(Company=cmp, status='Active')
+#         customer = Fin_Customers.objects.filter(Company=cmp, status='Active')
+#         payment_terms = Fin_Company_Payment_Terms.objects.filter(Company=cmp)
+#         bank = Fin_Banking.objects.filter(company=cmp)
+#         plist = Fin_Price_List.objects.filter(Company=cmp, status='Active')
+#         units = Fin_Units.objects.filter(Company=cmp)
+#         account = Fin_Chart_Of_Account.objects.filter(
+#             Q(account_type='Expense') | Q(account_type='Other Expense') | Q(account_type='Cost Of Goods Sold'),
+#             Company=cmp).order_by('account_name')
+
+#         latest_ri = Fin_Retainer_Invoice.objects.filter(Company = cmp).order_by('-id').first()
+
+#         new_number = int(latest_ri.Reference_number) + 1 if latest_ri else 1
+
+#         if Fin_Retainer_Invoice_Reference.objects.filter(Company = cmp).exists():
+#             deleted = Fin_Retainer_Invoice_Reference.objects.get(Company = cmp)
+            
+#             if deleted:
+#                 while int(deleted.Reference_no)>= new_number:
+#                     new_number+=1
+
+#         new_ri_number = "" 
+#         if latest_ri:
+#             last_ri_number = latest_ri.Retainer_Invoice_number
+#             numeric_part = last_ri_number[len('RETINV'):] 
+#             new_numeric_part = int(numeric_part) + 1
+#             new_ri_number = f'RETINV{str(new_numeric_part).zfill(len(numeric_part))}'
+#         else:
+#             new_ri_number = 'RETINV01'
+
+#         context = {
+#             'allmodules': allmodules, 'com': com, 'cmp': cmp, 'data': data, 'customer': customer, 'item': item,
+#             'banks': bank, 'pterm': payment_terms, 'unit': units, 'account': account, 'plist': plist,
+#             'ref_no': new_number, 'riNo': new_ri_number
+#         }
+#         return render(request, 'company/RET_INV/RET_INV_add.html', context)
+#     else:
+#         return redirect('/')
 def Fin_RET_INV_Add(request):
     if 's_id' in request.session:
         s_id = request.session['s_id']
-        data = Fin_Login_Details.objects.get(id = s_id)
+        data = Fin_Login_Details.objects.get(id=s_id)
         if data.User_Type == "Company":
-            com = Fin_Company_Details.objects.get(Login_Id = s_id)
-            allmodules = Fin_Modules_List.objects.get(Login_Id = s_id,status = 'New')
+            com = Fin_Company_Details.objects.get(Login_Id=s_id)
+            allmodules = Fin_Modules_List.objects.get(Login_Id=s_id, status='New')
             cmp = com
         else:
-            com = Fin_Staff_Details.objects.get(Login_Id = s_id)
-            allmodules = Fin_Modules_List.objects.get(company_id = com.company_id,status = 'New')
+            com = Fin_Staff_Details.objects.get(Login_Id=s_id)
+            allmodules = Fin_Modules_List.objects.get(company_id=com.company_id, status='New')
             cmp = com.company_id
-       
 
-        item = Fin_Items.objects.filter(Company = cmp, status = 'Active')
-        customer = Fin_Customers.objects.filter(Company = cmp, status = 'Active')
-        payment_terms = Fin_Company_Payment_Terms.objects.filter(Company = cmp)
-        bank = Fin_Banking.objects.filter(company = cmp)
-        list = Fin_Price_List.objects.filter(Company = cmp, status = 'Active')
-        units = Fin_Units.objects.filter(Company = cmp)
-        account = Fin_Chart_Of_Account.objects.filter(Q(account_type='Expense') | Q(account_type='Other Expense') | Q(account_type='Cost Of Goods Sold'), Company=cmp).order_by('account_name')
+        item = Fin_Items.objects.filter(Company=cmp, status='Active')
+        customer = Fin_Customers.objects.filter(Company=cmp, status='Active')
+        payment_terms = Fin_Company_Payment_Terms.objects.filter(Company=cmp)
+        bank = Fin_Banking.objects.filter(company=cmp)
+        plist = Fin_Price_List.objects.filter(Company=cmp, status='Active')
+        units = Fin_Units.objects.filter(Company=cmp)
+        account = Fin_Chart_Of_Account.objects.filter(
+            Q(account_type='Expense') | Q(account_type='Other Expense') | Q(account_type='Cost Of Goods Sold'),
+            Company=cmp).order_by('account_name')
+
         latest_ri = Fin_Retainer_Invoice.objects.filter(Company = cmp).order_by('-id').first()
 
         new_number = int(latest_ri.Reference_number) + 1 if latest_ri else 1
@@ -16884,100 +17009,111 @@ def Fin_RET_INV_Add(request):
                 while int(deleted.Reference_no)>= new_number:
                     new_number+=1
 
-       
-        nxtRI = ""
-        lastRI = Fin_Retainer_Invoice.objects.filter(Company = cmp).last()
-        if lastRI:
-            ri_no = str(lastRI.Retainer_Invoice_number)
-            numbers = []
-            stri = []
-            for word in ri_no:
-                if word.isdigit():
-                    numbers.append(word)
-                else:
-                    stri.append(word)
-            
-            num=''
-            for i in numbers:
-                num +=i
-            
-            st = ''
-            for j in stri:
-                st = st+j
+        new_ri_number = "" 
+        if latest_ri:
+            last_ri_number = latest_ri.Retainer_Invoice_number
+            code_prefix = last_ri_number[:last_ri_number.find(next(filter(str.isdigit, last_ri_number)))]
+            numeric_part = last_ri_number[len(code_prefix):] 
+            new_numeric_part = int(numeric_part) + 1
+            new_ri_number = f'{code_prefix}{str(new_numeric_part).zfill(len(numeric_part))}'
 
-            ri_num = int(num)+1
-
-            if num[0] == '0':
-                if ri_num <10:
-                    nxtri = st+'0'+ str(ri_num)
-                else:
-                    nxtri = st+ str(ri_num)
-            else:
-                nxtri = st+ str(ri_num)
-        else:
-            nxtri = 'RETINV01'
         context = {
-            'allmodules':allmodules, 'com':com, 'cmp':cmp, 'data':data, 'customer':customer, 'item':item, 
-           'banks':bank,'pterm':payment_terms,'unit':units,'account':account,'plist':list,'ref_no':new_number,'riNo':nxtri
+            'allmodules': allmodules, 'com': com, 'cmp': cmp, 'data': data, 'customer': customer, 'item': item,
+            'banks': bank, 'pterm': payment_terms, 'unit': units, 'account': account, 'plist': plist,
+            'ref_no': new_number, 'riNo': new_ri_number
         }
-        return render(request,'company/RET_INV/RET_INV_add.html',context)
+        return render(request, 'company/RET_INV/RET_INV_add.html', context)
     else:
-       return redirect('/')
+        return redirect('/')
+
 
 def Fin_validate_retinv_number(request):
     if 's_id' in request.session:
         s_id = request.session['s_id']
-        data = Fin_Login_Details.objects.get(id = s_id)
+        data = Fin_Login_Details.objects.get(id=s_id)
         if data.User_Type == "Company":
-            com = Fin_Company_Details.objects.get(Login_Id = s_id)
+            com = Fin_Company_Details.objects.get(Login_Id=s_id)
         else:
-            com = Fin_Staff_Details.objects.get(Login_Id = s_id).company_id
+            com = Fin_Staff_Details.objects.get(Login_Id=s_id).company_id
         
         RINo = request.GET['ret_inv_no']
 
         nxtRI = ""
-        lastRI = Fin_Retainer_Invoice.objects.filter(Company = com).last()
+        lastRI = Fin_Retainer_Invoice.objects.filter(Company=com).last()
         if lastRI:
-            ri_no = str(lastRI.Retainer_Invoice_number)
-            numbers = []
-            stri = []
-            for word in ri_no:
-                if word.isdigit():
-                    numbers.append(word)
-                else:
-                    stri.append(word)
-            
-            num=''
-            for i in numbers:
-                num +=i
-            
-            st = ''
-            for j in stri:
-                st = st+j
+            last_ri_number = lastRI.Retainer_Invoice_number
+            code_prefix = last_ri_number[:last_ri_number.find(next(filter(str.isdigit, last_ri_number)))]
+            numeric_part = last_ri_number[len(code_prefix):] 
+            new_numeric_part = int(numeric_part) + 1
+            nxtRI = f'{code_prefix}{str(new_numeric_part).zfill(len(numeric_part))}'
 
-            ri_num = int(num)+1
-
-            if num[0] == '0':
-                if ri_num <10:
-                    nxtRI = st+'0'+ str(ri_num)
-                else:
-                    nxtRI = st+ str(ri_num)
-            else:
-                nxtRI = st+ str(ri_num)
-
-        if Fin_Retainer_Invoice.objects.filter(Company = com, Retainer_Invoice_number__iexact =RINo).exists():
-            return JsonResponse({'status':False, 'message':'Retainer Invoice No already Exists.!'})
+        if Fin_Retainer_Invoice.objects.filter(Company=com, Retainer_Invoice_number__iexact=RINo).exists():
+            return JsonResponse({'status': False, 'message': 'Retainer Invoice No already Exists.!'})
         elif nxtRI != "" and RINo != nxtRI:
-            return JsonResponse({'status':False, 'message':'Retainer Invoice No is not continuous.!'})
+            return JsonResponse({'status': False, 'message': 'Retainer Invoice No is not continuous.!'})
         else:
-            return JsonResponse({'status':True, 'message':'Retainer Number is okay.!'})
+            return JsonResponse({'status': True, 'message': 'Retainer Number is okay.!'})
     else:
        return redirect('/')
 
     return JsonResponse({'valid': False, 'error': 'Session not found'})
 
 
-    
+
+
+# def Fin_validate_retinv_number(request):
+#     if 's_id' in request.session:
+#         s_id = request.session['s_id']
+#         data = Fin_Login_Details.objects.get(id = s_id)
+#         if data.User_Type == "Company":
+#             com = Fin_Company_Details.objects.get(Login_Id = s_id)
+#         else:
+#             com = Fin_Staff_Details.objects.get(Login_Id = s_id).company_id
+        
+#         RINo = request.GET['ret_inv_no']
+
+#         nxtRI = ""
+#         lastRI = Fin_Retainer_Invoice.objects.filter(Company = com).last()
+#         if lastRI:
+#             ri_no = str(lastRI.Retainer_Invoice_number)
+#             numbers = []
+#             stri = []
+#             for word in ri_no:
+#                 if word.isdigit():
+#                     numbers.append(word)
+#                 else:
+#                     stri.append(word)
+            
+#             num=''
+#             for i in numbers:
+#                 num +=i
+            
+#             st = ''
+#             for j in stri:
+#                 st = st+j
+
+#             ri_num = int(num)+1
+
+#             if num[0] == '0':
+#                 if ri_num <10:
+#                     nxtRI = st+'0'+ str(ri_num)
+#                 else:
+#                     nxtRI = st+ str(ri_num)
+#             else:
+#                 nxtRI = st+ str(ri_num)
+
+#         if Fin_Retainer_Invoice.objects.filter(Company = com, Retainer_Invoice_number__iexact =RINo).exists():
+#             return JsonResponse({'status':False, 'message':'Retainer Invoice No already Exists.!'})
+#         elif nxtRI != "" and RINo != nxtRI:
+#             return JsonResponse({'status':False, 'message':'Retainer Invoice No is not continuous.!'})
+#         else:
+#             return JsonResponse({'status':True, 'message':'Retainer Number is okay.!'})
+#     else:
+#        return redirect('/')
+
+#     return JsonResponse({'valid': False, 'error': 'Session not found'})
+
+
 
 def Fin_Create_RET_INV(request):
     if 's_id' in request.session:
@@ -17570,7 +17706,7 @@ def Fin_shareRIEmail(request,id):
                 pdf = result.getvalue()
                 filename = f'Retainer_Invoice_{retinv.Retainer_Invoice_number}'
                 subject = f"Invoice_{retinv.Retainer_Invoice_number}"
-                email = EmailMessage(subject, f"Hi,\nPlease find the attached Invoice for -RETAINER INVOICE-{retinv.Retainer_Invoice_number}. \n{email_message}\n\n--\nRegards,\n{com.Company_name}\n{com.Address}\n{com.State} - {com.Country}\n{com.Contact}", from_email=settings.EMAIL_HOST_USER, to=emails_list)
+                email = EmailMessage(subject, f"Hi,\nPlease find the attached Retainer Invoice for -RETAINER INVOICE-{retinv.Retainer_Invoice_number}. \n{email_message}\n\n--\nRegards,\n{com.Company_name}\n{com.Address}\n{com.State} - {com.Country}\n{com.Contact}", from_email=settings.EMAIL_HOST_USER, to=emails_list)
                 email.attach(filename, pdf, "application/pdf")
                 email.send(fail_silently=False)
 

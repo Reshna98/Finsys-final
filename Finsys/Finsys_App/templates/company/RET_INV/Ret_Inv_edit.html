@@ -1739,10 +1739,7 @@ $(document).on('change','#RETNUM', function() {
         $('#invNoErr').text('');
         var ri_num = $(this).val();
         if(ri_num != ""){
-            if (!ri_num.startsWith("RETINV")) {
-                    alert("Retainer Invoice Number must start with 'RETINV'");
-                    return; 
-                }
+            
             
             $.ajax({
                 type: "GET",
@@ -1819,7 +1816,7 @@ $(document).ready(function(){
             </td>
         </tr>
         `);
-       
+        reloadItems();
     });
   });
   function filterFunction(id){

@@ -402,10 +402,81 @@
                                 </div>
                                 
                                 <hr class="my-4">
+                                <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                    <div class="col-md-4 mt-3">
+                                        <h5 style="border-bottom: 1px solid rgba(128, 128, 128, 0.6); width: fit-content;">Customer Details</h5>
+                                    </div>
+                                    <div class="col-md-4 mt-3"></div>
+                                    <div class="col-md-4 mt-3"></div>
+    
+                                    <div class="col-md-2 mt-3">
+                                        <h6 class="mb-0">Customer</h6>
+                                    </div>
+                                    <div class="col-md-4 mt-3">
+                                        <p class="mb-0 text-right">{{Ret_Invoice.Customer.title}} {{Ret_Invoice.Customer.first_name}} {{Ret_Invoice.Customer.last_name}}</p>
+                                    </div>
+                                    <div class="col-md-2 mt-3 vl">
+                                        <h6 class="mb-0">Email</h6>
+                                    </div>
+                                    <div class="col-md-4 mt-3">
+                                        <p class="mb-0 text-right">{{Ret_Invoice.Customer_email }}</p>
+                                    </div>
+                                </div>
+                                <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                    <div class="col-md-3 mt-3">
+                                        <h6 class="mb-0">Billing_Address</h6>
+                                    </div>
+                                    <div class="col-md-3 mt-3">
+                                        <p class="mb-0 text-right">{{ Ret_Invoice.Customer_billing_address }}</p>
+                                    </div>
+                                    <div class="col-md-3 mt-3 vl">
+                                        <h6 class="mb-0">Place of Supply</h6>
+                                    </div>
+                                    <div class="col-md-3 mt-3">
+                                        <p class="mb-0 text-right">{{ Ret_Invoice.Customer_place_of_supply }} 
+                                           
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                    {% if Ret_Invoice.Customer_gstin %}
+                                    <div class="col-md-2 mt-3">
+                                        <h6 class="mb-0">GST Type</h6>
+                                    </div>
+                                    <div class="col-md-4 mt-3">
+                                        <p class="mb-0 text-right">{{ Ret_Invoice.Customer_gst_type }}</p>
+                                    </div>
+                                    {%else%}
+                                    <div class="col-md-2 mt-3">
+                                        <h6 class="mb-0">GST Type</h6>
+                                    </div>
+                                    <div class="col-md-4 mt-3">
+                                        <p class="mb-0 text-right">{{ Ret_Invoice.Customer_gst_type }}</p>
+                                    </div>
+                                    <div class="col-md-6 mt-3 vl">
+                                        <h6 class="mb-0">&nbsp;</h6>
+                                    </div>
+
+                                    {% endif %}
+                                    
+                                    
+                                    {% if Ret_Invoice.Customer_gstin %}
+                                        <div class="col-md-2 mt-3 vl">
+                                        <h6 class="mb-0">GSTIN</h6>
+                                        </div>
+                                        <div class="col-md-4 mt-3">
+                                        <p class="mb-0 text-right">{{ Ret_Invoice.Customer_gstin }}</p>
+                                        </div>
+                                    {% endif %}
+
+                                </div>
+                               
+                                
+                                <hr class="my-4">
 
                                 <div class="row mb-4 d-flex justify-content-between align-items-center">
                                     <div class="col-md-4 mt-3">
-                                        <h5 style="border-bottom: 1px solid rgba(128, 128, 128, 0.6); width: fit-content;">Billing Details</h5>
+                                        <h5 style="border-bottom: 1px solid rgba(128, 128, 128, 0.6); width: fit-content;">Retainer Invoice Details</h5>
                                     </div>
                                     <div class="col-md-4 mt-3"></div>
                                     <div class="col-md-4 mt-3"></div>
@@ -417,50 +488,78 @@
                                         <p class="mb-0 text-right">{{Ret_Invoice.Retainer_Invoice_number }}</p>
                                       
                                     </div>
-    
-                                    <div class="col-md-3 mt-3 vl">
-                                        <h6 class="mb-0">Payment_Method</h6>
-                                    </div>
-                                    <div class="col-md-3 mt-3">
-                                        {% if is_bank_payment %}
-                                            <p class="mb-0 text-right">{{ bank_name }}</p>
-                                        {% else %}
-                                            <p class="mb-0 text-right">{{ Ret_Invoice.Payment_Method }}</p>
-                                        {% endif %}
-                                    </div>
-                                    
-                                    
-                                </div>
-                                <div class="row mb-4 d-flex justify-content-between align-items-center">
-                                    <div class="col-md-3 mt-3">
+                                     <div class="col-md-3 mt-3 vl">
                                         <h6 class="mb-0">Retainer Invoice Date</h6>
                                     </div>
                                     <div class="col-md-3 mt-3">
                                         <p class="mb-0 text-right">{{Ret_Invoice.Retainer_Invoice_date| date:'d-m-Y'}}</p>
                                     </div>
-                                    <div class="col-md-3 mt-3 vl">
-                                        <h6 class="mb-0">Customer Name</h6>
+                                   
+                                    
+                                    
+                                </div>
+                                <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                 
+                                    <div class="col-md-3 mt-3 ">
+                                        <h6 class="mb-0">Address</h6>
                                     </div>
                                     <div class="col-md-3 mt-3">
-                                        <p class="mb-0 text-right">{{Ret_Invoice.Customer.title}}. {{Ret_Invoice.Customer.first_name}} {{Ret_Invoice.Customer.last_name}}</p>
-                                    </div>
+                                        <p class="mb-0 text-right">{{Ret_Invoice.Customer_billing_address}}</p>
                                    
 
                                 </div>
-                                <div class="row mb-4 d-flex justify-content-start align-items-center">
-                                    <div class="col-md-3 mt-3"> 
-                                        <h6 class="mb-0">Address</h6>
-                                    </div>
-                                    <div class="col-md-3 mt-3 vr">
-                                        <p class="mb-0">{{Ret_Invoice.Customer_billing_address}}</p>
-                                    </div>
-                                    
-                                    <div class="col-md-6 mt-3 vl">
-                                        <p class="mb-0 text-right">&nbsp;</p>
-                                    </div>
+                                <div class="col-md-3 mt-3 vl">
+                                    <h6 class="mb-0">Payment_Method</h6>
+                                </div>
+                                <div class="col-md-3 mt-3">
+                                    {% if is_bank_payment %}
+                                        <p class="mb-0 text-right">{{ bank_name }}</p>
+                                    {% else %}
+                                        <p class="mb-0 text-right">{{ Ret_Invoice.Payment_Method }}</p>
+                                    {% endif %}
+                                </div>
+                                
                                    
                                 </div>
                                 
+                                {% if Ret_Invoice.Payment_Method != "Cash" %}
+                            <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                {% if Ret_Invoice.Payment_Method != "" %}
+                                    {% if Ret_Invoice.Payment_Method == "Cheque" %}
+                                        <div class="col-md-3 mt-3">
+                                            <h6 class="mb-0">Cheque Number</h6>
+                                            </div>
+                                            <div class="col-md-3 mt-3">
+                                                <p class="mb-0 text-right">{{ Ret_Invoice.Cheque_number }}</p>
+                                        </div>
+                                        <div class="col-md-6 mt-3 vl">
+                                            <h6 class="mb-0">&nbsp;</h6>
+                                        </div>
+                                {% elif Ret_Invoice.Payment_Method == "UPI" %}
+                                    <div class="col-md-3 mt-3">
+                                        <h6 class="mb-0">UPI Number</h6>
+                                    </div>
+                                    <div class="col-md-3 mt-3">
+                                        <p class="mb-0 text-right">{{ Ret_Invoice.UPI_number }}</p>
+                                    </div>
+                                    <div class="col-md-6 mt-3 vl">
+                                        <h6 class="mb-0">&nbsp;</h6>
+                                    </div>
+                                {% else %}
+                                    <div class="col-md-3 mt-3">
+                                        <h6 class="mb-0">Account Number</h6>
+                                        </div>
+                                        <div class="col-md-3 mt-3">
+                                        <p class="mb-0 text-right">{{ Ret_Invoice.Bank_account_no }}</p>
+                                    </div>
+                                    <div class="col-md-6 mt-3 vl">
+                                        <h6 class="mb-0">&nbsp;</h6>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                            </div>
+                        {% endif %}
+
                                 <hr>
 
                                 <div class="row mb-4 d-flex justify-content-between align-items-center">
@@ -534,10 +633,10 @@
                     <div class="col-lg-4 bg-grey">
 
                         <div class="px-3">
-                            <h4 class="fw-bold mb-2 mt-4 pt-1">Bill Details</h4>
+                            <h4 class="fw-bold mb-2 mt-4 pt-1">Retainer Invoice Amount Details</h4>
                             <hr class="my-4">
                             <div class="d-flex justify-content-between mb-4">
-                                <h6 class="">Bill Status</h6>
+                                <h6 class="">Retainer Invoice Status</h6>
                                 {% if Ret_Invoice.status == 'Draft' %} <span class="text-info h5 font-weight-bold">DRAFT</span> {% else %} <span class="text-success h5 font-weight-bold">SENT</span> {% endif %}
                             </div>
                             <div class="d-flex justify-content-between mb-4">
@@ -558,7 +657,18 @@
                                 <h6 class="">Grand Total</h6>
                                 <span class="font-weight-bold">{{ Ret_Invoice.Grand_total }}</span>
                             </div>
-                            
+                            <hr class="my-4">
+                            {% if Ret_Invoice.Paid_amount != 0 %}
+                            <div class="d-flex justify-content-between mb-4">
+                                <h6 class="">Paid Off</h6>
+                                <span class="font-weight-bold">{{ Ret_Invoice.Paid_amount }}</span>
+                            </div>
+                            {% endif %}
+                       
+                            <div class="d-flex justify-content-between mb-4">
+                                <h6 class="">Balance</h6>
+                                <span class="font-weight-bold">{{ Ret_Invoice.Balance }}</span>
+                            </div>
                         </div>
 
                     </div>
@@ -626,7 +736,7 @@
                                                 <td style="font-weight:bold; color:black">HSN</td>
                                                 <td style="font-weight:bold; color:black">Price</td>
                                                 <td style="font-weight:bold; color:black">Quantity</td>
-                                                <td style="font-weight:bold; color:black">Description</td>
+                                                <!-- <td style="font-weight:bold; color:black">Description</td> -->
                                                 <td style="font-weight:bold; color:black">Discount</td>
                                                 <td style="font-weight:bold; color:black">Total</td>
                                             </tr>
@@ -639,7 +749,7 @@
                                                 <td style="color:black">{{j.HSN}}</td>
                                                 <td style="color:black">{{j.Price}}</td>
                                                 <td style="color:black">{{j.Quantity}}</td>
-                                                <td style="color:black">{{j.Discription}}</td>
+                                                <!-- <td style="color:black">{{j.Discription}}</td> -->
                                                 <td style="color:black">{{j.discount}} </td>
                                                 <td style="color:black">{{j.Total}}</td>
                                             </tr>
@@ -659,28 +769,50 @@
                                                         <td style="color: #000;">:</td>
                                                         <td class="text-right" style="color: #000;">{{Ret_Invoice.Sub_total}}</td>
                                                     </tr>
-                                                  
                                                     
-                                                    {% if Ret_Invoice.Adjustment != 0 %}
-                                                    <tr >
-                                                        <td style="color: #000;">Adjustment</td>
-                                                        <td style="color: #000;">:</td>
-                                                        <td class="text-right" style="color: #000;">{{Ret_Invoice.Adjustment}}</td>
-                                                    </tr>
-                                                    {% endif %}
+                                                   
+                                                    
+                                                  {% if Ret_Invoice.Adjustment != 0 %}
+                                                  <tr >
+                                                      <td style="color: #000;">Adjustment</td>
+                                                      <td style="color: #000;">:</td>
+                                                      <td class="text-right" style="color: #000;">{{Ret_Invoice.Adjustment}}</td>
+                                                  </tr>
+                                                  {% endif %}
+                                                 
+                                                  
+                                                 
+                                                  <tr >
+                                                      <th style="color: #000;">Grand Total</th>
+                                                      <th style="color: #000;">:</th>
+                                                      <th class="text-right" style="color: #000;">{{Ret_Invoice.Grand_total}}</th>
+                                                  </tr>
                                                 </tbody>
-            
+        
                                             </table>
                                             <hr style="background-color: #000000;">
+                                           
                                             <table class="table table-borderless">
-                                                <tbody>
-                                                    <tr >
-                                                        <th style="color: #000;">Grand Total</th>
-                                                        <th style="color: #000;">:</th>
-                                                        <th class="text-right" style="color: #000;">{{Ret_Invoice.Grand_total}}</th>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                              <tbody>
+                                                
+                                                {% if Ret_Invoice.Paid_amount != 0 %}
+                                                <tr >
+                                                    <td style="color: #000;">Paid Off</td>
+                                                    <td style="color: #000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</td>
+                                                    <td class="text-right" style="color: #000;">{{Ret_Invoice.Paid_amount}}</td>
+                                                </tr>
+                                                {% endif %}
+                                                <tr >
+                                                    <td style="color: #000;">Balance</td>
+                                                    <td style="color: #000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</td>
+                                                    <td class="text-right" style="color: #000;">{{Ret_Invoice.Balance}}</td>
+                                                </tr>
+                                              
+                                              </tbody>
+      
+                                          </table>
+            
+                                           
                                         </div>
                                     </div>
                                 </section>
@@ -745,7 +877,7 @@
                                                   <th class="text-center bg-dark" style="color:black">HSN</th>
                                                   <th class="text-center bg-dark" style="color:black">Quantity</th>
                                                   <th class="text-center bg-dark" style="color:black">Rate</th>
-                                                  <th class="text-center bg-dark" style="color:black">Description</th>
+                                                  <!-- <th class="text-center bg-dark" style="color:black">Description</th> -->
                                                   <th class="text-center bg-dark" style="color:black">Discount</th>
                                                   <th class="text-center bg-dark" style="color:black">Total</th>
                                               </tr>
@@ -757,7 +889,7 @@
                                                       <td class="text-center" style="color:black">{{ itm.HSN }}</td>
                                                       <td class="text-center" style="color:black">{{ itm.Quantity }}</td>
                                                       <td class="text-center" style="color:black">{{ itm.Price }}</td>
-                                                      <td class="text-center" style="color:black">{{ itm.Discription }}</td>
+                                                      <!-- <td class="text-center" style="color:black">{{ itm.Discription }}</td> -->
                                                       <td class="text-center" style="color:black">{{ itm.discount }}</td>
                                                       <td class="text-center" style="color:black">{{ itm.Total }}</td>
                                                   </tr>
@@ -801,19 +933,38 @@
                                                         <td class="text-right" style="color: #000;">{{Ret_Invoice.Adjustment}}</td>
                                                     </tr>
                                                     {% endif %}
+                                                   
+                                                    
+                                                   
+                                                    <tr >
+                                                        <th style="color: #000;">Grand Total</th>
+                                                        <th style="color: #000;">:</th>
+                                                        <th class="text-right" style="color: #000;">{{Ret_Invoice.Grand_total}}</th>
+                                                    </tr>
                                                   </tbody>
           
                                               </table>
                                               <hr style="background-color: #000000;">
+                                             
                                               <table class="table table-borderless">
-                                                  <tbody>
-                                                      <tr >
-                                                          <th style="color: #000;">Grand Total</th>
-                                                          <th style="color: #000;">:</th>
-                                                          <th class="text-right" style="color: #000;">{{Ret_Invoice.Grand_total}}</th>
-                                                      </tr>
-                                                  </tbody>
-                                              </table>
+                                                <tbody>
+                                                  
+                                                  {% if Ret_Invoice.Paid_amount != 0 %}
+                                                  <tr >
+                                                      <td style="color: #000;">Paid Off</td>
+                                                      <td style="color: #000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</td>
+                                                      <td class="text-right" style="color: #000;">{{Ret_Invoice.Paid_amount}}</td>
+                                                  </tr>
+                                                  {% endif %}
+                                                  <tr >
+                                                      <td style="color: #000;">Balance</td>
+                                                      <td style="color: #000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</td>
+                                                      <td class="text-right" style="color: #000;">{{Ret_Invoice.Balance}}</td>
+                                                  </tr>
+                                                
+                                                </tbody>
+        
+                                            </table>
                                           </div> 
                                       </div>
                                   </section>
@@ -881,7 +1032,7 @@
                                                     <th class="text-center bg-dark"  style="color:black">HSN</th>
                                                     <th class="text-center bg-dark"  style="color:black">Quantity</th>
                                                     <th class="text-center bg-dark"  style="color:black">Rate</th>
-                                                    <th class="text-center bg-dark"  style="color:black">Description</th>
+                                                    <!-- <th class="text-center bg-dark"  style="color:black">Description</th> -->
                                                     <th class="text-center bg-dark"  style="color:black">Discount</th>
                                                     <th class="text-center bg-dark"  style="color:black">Total</th>
                                                 </tr>
@@ -894,7 +1045,7 @@
                                                     <td class="text-center" style="color:black">{{ itm.HSN }}</td>
                                                     <td class="text-center" style="color:black">{{ itm.Quantity }}</td>
                                                     <td class="text-center" style="color:black">{{ itm.Price }}</td>
-                                                    <td class="text-center" style="color:black">{{ itm.Discription }}</td>
+                                                    <!-- <td class="text-center" style="color:black">{{ itm.Discription }}</td> -->
                                                     <td class="text-center" style="color:black">{{ itm.discount }}</td>
                                                     <td class="text-center" style="color:black">{{ itm.Total }}</td>
                                                 </tr>
@@ -925,20 +1076,33 @@
                                                         <td class="text-right" style="color: #000;">{{Ret_Invoice.Adjustment}}</td>
                                                     </tr>
                                                     {% endif %}
-                                                </tbody>
-            
-                                            </table>
-                                            <hr style="background-color: #000000;">
-                                            <table class="table table-borderless">
-                                                <tbody>
                                                     <tr >
                                                         <th style="color: #000;">Grand Total</th>
                                                         <th style="color: #000;">:</th>
                                                         <th class="text-right" style="color: #000;">{{Ret_Invoice.Grand_total}}</th>
                                                     </tr>
+                                                    </tbody></table>
+                                                    <hr style="background-color: #000000;">
+                                                    <table class="table table-borderless">
+                                                        <tbody>
+                                                    {% if Ret_Invoice.Paid_amount != 0 %}
                                                     <tr >
+                                                        <td style="color: #000;">Paid Off</td>
+                                                        <td style="color: #000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</td>
+                                                        <td class="text-right" style="color: #000;">{{Ret_Invoice.Paid_amount}}</td>
+                                                    </tr>
+                                                    {% endif %}
+                                                   
+                                                    <tr >
+                                                        <td style="color: #000;">Balance</td>
+                                                        <td style="color: #000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</td>
+                                                        <td class="text-right" style="color: #000;">{{Ret_Invoice.Balance}}</td>
+                                                    </tr>
                                                 </tbody>
+            
                                             </table>
+                                         
+                                          
                                         </div>
                                     </div>
                                 </section> 
@@ -1002,10 +1166,10 @@
                                 Rate
                                 <hr style="border-bottom: 1px solid black; margin-top:1vh; width:65%;  margin-left: 10px;">
                             </div>
-                            <div class="equal-length-item"  style=" text-align: center; ">
+                            <!-- <div class="equal-length-item"  style=" text-align: center; ">
                                 Description
                                 <hr style="border-bottom: 1px solid black; margin-top:1vh; width:60%;  margin-left: 10px;">
-                            </div>
+                            </div> -->
                             <div class="equal-length-item" style=" text-align: center; ">
                                 Total
                                 <hr style="border-bottom: 1px solid black; margin-top:1vh; width:65%;  margin-left: 10px;">
@@ -1045,16 +1209,32 @@
                                 <span><span>&#8377; </span>{{Ret_Invoice.Adjustment}}</span>
                             </div>
                             {% endif %}
-                        </div>
+
                         <div class="divider"></div>
                         <div class="grandtot fw-bold d-flex justify-content-between">
                             <span><strong>TOTAL</strong></span>
                             <span><strong><span>&#8377; </span>{{Ret_Invoice.Grand_total}}</strong></span>
                         </div>
                         <div class="divider"></div>
+                        {% if Ret_Invoice.Paid_amount != 0 %}
+                        <div class="subtot-item d-flex justify-content-between">
+                            <span>Paid Off</span>
+                            <span><span>&#8377; </span>{{Ret_Invoice.Paid_amount}}</span>
+                        </div>
+                        {% endif %}
+                        <div class="subtot-item d-flex justify-content-between">
+                            <span>Balance</span>
+                            <span><span>&#8377; </span>{{Ret_Invoice.Balance}}</span>
+                        </div>
+                    </div>
                         <div class="paid-by mb-4 d-flex justify-content-between">
                             <span>Paid By:</span>
-                            <span>{{Ret_Invoice.Payment_method}}</span>
+                           
+                            {% if is_bank_payment %}
+                                <span>{{ bank_name }}</span>
+                            {% else %}
+                                <span>{{Ret_Invoice.Payment_Method}}</span>
+                            {% endif %}
                         </div>
                         <div class="createdby d-flex justify-content-between">
                             <p class="">Created By:</p>
@@ -1102,7 +1282,7 @@
                         </div>
                         <div class="form-group mt-2">
                             <label for="item_unitname">Message(optional)</label>
-                            <textarea name="email_message" id="email_message" class="form-control" cols="" rows="4" placeholder="This message will be sent along with Bill details."></textarea>
+                            <textarea name="email_message" id="email_message" class="form-control" cols="" rows="4" placeholder="This message will be sent along with Retainer Invoice details."></textarea>
                         </div>
                     </form>
                 </div>

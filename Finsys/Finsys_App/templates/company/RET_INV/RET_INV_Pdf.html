@@ -121,7 +121,7 @@
                         {% for itm in riItems %}
                         <tr>
                             <td style="text-align: center;">{{itm.Item.name}}</td>
-                            <td style="text-align: center;">{{itm.Hsn}}</td>
+                            <td style="text-align: center;">{{itm.HSN}}</td>
                             <td style="text-align: center;">{{itm.Price}}</td>
                             <td style="text-align: center;">{{itm.discount}}</td>
                             <td style="text-align: center;">{{itm.Total}}</td>
@@ -149,6 +149,17 @@
                         <br>
                         <div class="data_row">
                             <div class="data_1 data_value"><b>GRAND TOTAL</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{retinv.Grand_total}}</div>
+                        </div>
+                        <br>
+                        <div class="data_row">
+                            {% if retinv.Paid_amount != 0 %}
+                            <div class="data_1 data_value">Paid Amount&nbsp;&nbsp;&nbsp;: {{retinv.Paid_amount}}</div>
+                            {% endif %}
+                           
+                        </div>
+                        <br>
+                        <div class="data_row">
+                            <div class="data_1 data_value"><b>Balance</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{retinv.Balance}}</div>
                         </div>
                     </div>
                 </div>

@@ -545,6 +545,7 @@ urlpatterns = [
     path('Fin_RET_INV_edit/<int:id>',views.Fin_RET_INV_edit,name='Fin_RET_INV_edit'),
     path('Fin_RET_INV_update/<int:id>',views.Fin_RET_INV_update,name='Fin_RET_INV_update'),
     path('Fin_convertRI/<int:id>',views.Fin_convertRI,name='Fin_convertRI'),
+    #--------------------------------------------------------------------------------
     # path('/<int:id>',views.,name=''),
     
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
